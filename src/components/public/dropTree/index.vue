@@ -77,6 +77,7 @@
             class="notMultiple"
             :data="options"
             node-key="value"
+            :expand-on-click-node="lastActive"
             ref="tree"
             :filter-node-method="filterLabel"
             :default-checked-keys="[value]"
@@ -151,6 +152,10 @@ export default {
     disabled:{
       type: Boolean,
       default: false
+    },
+    lastActive:{
+      type: Boolean,
+      default: true
     }
 
 
@@ -281,7 +286,7 @@ export default {
       this.searchTimer = setTimeout(fn, 500)
     },
     currentClick(a){
-      if(a.children) return
+      if(a.children && this.lastActive) return
       this.change = true
       this.$emit('input', a.value);
       this.$emit('change', a.value);
@@ -362,10 +367,9 @@ export default {
     getEveryOne(array){
       let all = []
       array.forEach(item=>{
+        all.push(item)
         if(item.children){
           all = [...all,...this.getEveryOne(item.children)]
-        }else{
-          all.push(item)
         }
       })
       return all

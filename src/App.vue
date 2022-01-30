@@ -12,7 +12,7 @@
         </div>
         <div :class="menuActive === 'sale' ? 'active' : ''" @click="changeMenu('sale')">
           <i class="iconfont icon-salecanter"></i>
-          <span v-show="toggleTrue">销售</span>
+          <span v-show="toggleTrue">销售管理</span>
         </div>
         <div :class="menuActive === 'stock' ? 'active' : ''" @click="changeMenu('stock')">
           <i class="iconfont icon-cangkukucun"></i>
@@ -20,7 +20,7 @@
         </div>
         <div :class="menuActive === 'purchase' ? 'active' : ''" @click="changeMenu('purchase')">
           <i class="iconfont icon-rukudan"></i>
-          <span v-show="toggleTrue">进货</span>
+          <span v-show="toggleTrue">采购管理</span>
         </div>
         <div :class="menuActive === 'storeManage' ? 'active' : ''" @click="changeMenu('storeManage')">
           <i class="iconfont icon-setting"></i>
