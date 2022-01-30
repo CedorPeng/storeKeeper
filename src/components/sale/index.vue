@@ -1,0 +1,490 @@
+<template>
+  <div class="sales">
+    <div class="searchBox clearfix">
+      <div class="searchItem">
+        <div class="searchLabel">产品名称：</div>
+        <dropTree
+          placeholder="请选择产品名称"
+          multiple
+          check-all
+          clearable
+          :options="productName.options"
+          v-model="productName.value"
+        ></dropTree>
+      </div>
+      <div class="searchItem">
+        <div class="searchLabel">销售渠道：</div>
+        <dropTree
+          placeholder="请选择销售渠道"
+          multiple
+          check-all
+          clearable
+          :options="channel.options"
+          v-model="channel.value"
+        ></dropTree>
+      </div>
+      <div class="searchItem">
+        <div class="searchLabel">购买客户：</div>
+        <div class="currentInput">
+          <el-input v-model="buyer" placeholder="请输入客户名称" size="mini" clearable></el-input>
+        </div>
+      </div>
+      <div class="searchItem">
+        <div class="searchLabel">销售人员：</div>
+        <dropTree
+          placeholder="请选择销售渠道"
+          multiple
+          check-all
+          clearable
+          :options="memberName.options"
+          v-model="memberName.value"
+        ></dropTree>
+      </div>
+      <div class="searchItem">
+        <div class="searchLabel">销售时间：</div>
+        <div class="currentInput">
+<!--          <el-input v-model="salesTime" placeholder="请输入客户名称" size="mini" clearable></el-input>-->
+          <el-date-picker
+            size="mini"
+            v-model="salesTime"
+            type="daterange"
+            align="right"
+            unlink-panels
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
+          </el-date-picker>
+        </div>
+      </div>
+      <div class="searchBtn">
+        <el-button size="mini" type="primary" @click="addSales">新增销售记录</el-button>
+        <el-button size="mini" type="primary" plain>重 置</el-button>
+        <el-button size="mini" type="primary">查 询</el-button>
+      </div>
+    </div>
+    <div class="salesMain">
+      <el-table
+        :data="salesData"
+        border
+        style="width: 99%"
+        height="calc(100vh - 284px)">
+        <el-table-column
+          prop="time"
+          width="160"
+          align="center"
+          label="销售时间">
+        </el-table-column>
+        <el-table-column
+          prop="buyer"
+          width="160"
+          align="center"
+          label="购买客户">
+        </el-table-column>
+        <el-table-column
+          prop="productName"
+          align="center"
+          label="购买产品">
+        </el-table-column>
+        <el-table-column
+          prop="channel"
+          width="160"
+          align="center"
+          label="购买渠道">
+        </el-table-column>
+        <el-table-column
+          prop="quantity"
+          width="120"
+          align="center"
+          label="购买数量">
+        </el-table-column>
+        <el-table-column
+          prop="amount"
+          width="120"
+          align="center"
+          label="购买金额">
+        </el-table-column>
+        <el-table-column
+          prop="seller"
+          width="120"
+          align="center"
+          label="销售人员">
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          width="100">
+          <template slot-scope="scope">
+            <el-button type="text" size="small">编辑</el-button>
+            <el-button type="text" size="small">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        @size-change="pageSizeChange"
+        @current-change="pageChange"
+        :current-page.sync="page"
+        :page-size="10"
+        layout="prev, pager, next, jumper"
+        :total="1000">
+      </el-pagination>
+    </div>
+    <el-dialog
+      :title="modelType === 'add' ? '新增角色' : '编辑角色'"
+      :visible.sync="showModel"
+      width="580px">
+      <span>
+        <el-form ref="salesForm" label-position="right" :rules="rules" label-width="120px" :model="salesForm">
+          <el-form-item label="销售日期：" prop="time">
+            <el-date-picker
+              v-model="salesForm.time"
+              size="mini"
+              type="date"
+              :clearable="false"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="买家姓名：" prop="buyer">
+            <el-input v-model="salesForm.buyer" size="mini" placeholder="请输入买家姓名"></el-input>
+          </el-form-item>
+          <el-form-item label="产品名称：" prop="productName">
+            <dropTree
+              :class="prodFlag ? 'dropError' : ''"
+              placeholder="请选择产品名称"
+              clearable
+              :options="productName.options"
+              v-model="salesForm.productName"
+            ></dropTree>
+          </el-form-item>
+          <el-form-item label="销售途径：" prop="channel">
+            <dropTree
+              :class="channelFlag ? 'dropError' : ''"
+              placeholder="请选择销售途径"
+              clearable
+              :options="channel.options"
+              v-model="salesForm.channel"
+            ></dropTree>
+          </el-form-item>
+          <el-form-item class="quantityBox" label="购买数量：" prop="quantity">
+            <el-input v-model="salesForm.quantity" size="mini" placeholder="请输入购买数量"></el-input>
+            <div class="unit">{{currentUnit}}</div>
+          </el-form-item>
+          <el-form-item label="购买金额：" prop="amount">
+            <el-input v-model="salesForm.amount" size="mini" placeholder="请输入购买金额"></el-input>
+          </el-form-item>
+          <el-form-item label="销售人员：" prop="seller">
+            <dropTree
+              :class="sellerFlag ? 'dropError' : ''"
+              placeholder="请选择销售人员"
+              clearable
+              :options="channel.options"
+              v-model="salesForm.seller"
+            ></dropTree>
+          </el-form-item>
+        </el-form>
+      </span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showModel = false">取 消</el-button>
+        <el-button type="primary" @click="confirmEdit('salesForm')">确 定</el-button>
+      </span>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import dropTree from '../public/dropTree/index'
+import Vue from "vue";
+export default {
+  name: "index",
+  components:{
+    dropTree
+  },
+  data(){
+    return {
+      productName:{
+        options:require('../../util/baseData').default.teaType,
+        value:[]
+      },
+      channel:{
+        options:require('../../util/baseData').default.channel,
+        value:[]
+      },
+      buyer:'',
+      salesTime:'',
+      memberName:{
+        options:[
+          {
+            label:'彭旭灿',
+            value:'彭旭灿'
+          },
+          {
+            label:'杨娜',
+            value:'杨娜'
+          },
+          {
+            label:'许佩清',
+            value:'许佩清'
+          },
+        ],
+        value:[],
+      },
+      salesData:[
+        {
+          time:'2021-10-20',
+          buyer:'xx',
+          productName:'绿茶',
+          channel:'店面',
+          quantity:'1000g',
+          amount:360,
+          seller:'彭旭灿',
+        },
+        {
+          time:'2021-10-20',
+          buyer:'xx',
+          productName:'绿茶',
+          channel:'店面',
+          quantity:'1000g',
+          amount:360,
+          seller:'彭旭灿',
+        },
+        {
+          time:'2021-10-20',
+          buyer:'xx',
+          productName:'绿茶',
+          channel:'店面',
+          quantity:'1000g',
+          amount:360,
+          seller:'彭旭灿',
+        },
+        {
+          time:'2021-10-20',
+          buyer:'xx',
+          productName:'绿茶',
+          channel:'店面',
+          quantity:'1000g',
+          amount:360,
+          seller:'彭旭灿',
+        },
+        {
+          time:'2021-10-20',
+          buyer:'xx',
+          productName:'绿茶',
+          channel:'店面',
+          quantity:'1000g',
+          amount:360,
+          seller:'彭旭灿',
+        },
+        {
+          time:'2021-10-20',
+          buyer:'xx',
+          productName:'绿茶',
+          channel:'店面',
+          quantity:'1000g',
+          amount:360,
+          seller:'彭旭灿',
+        },
+        {
+          time:'2021-10-20',
+          buyer:'xx',
+          productName:'绿茶',
+          channel:'店面',
+          quantity:'1000g',
+          amount:360,
+          seller:'彭旭灿',
+        },
+        {
+          time:'2021-10-20',
+          buyer:'xx',
+          productName:'绿茶',
+          channel:'店面',
+          quantity:'1000g',
+          amount:360,
+          seller:'彭旭灿',
+        },
+        {
+          time:'2021-10-20',
+          buyer:'xx',
+          productName:'绿茶',
+          channel:'店面',
+          quantity:'1000g',
+          amount:360,
+          seller:'彭旭灿',
+        },
+        {
+          time:'2021-10-20',
+          buyer:'xx',
+          productName:'绿茶',
+          channel:'店面',
+          quantity:'1000g',
+          amount:360,
+          seller:'彭旭灿',
+        },
+        {
+          time:'2021-10-20',
+          buyer:'xx',
+          productName:'绿茶',
+          channel:'店面',
+          quantity:'1000g',
+          amount:360,
+          seller:'彭旭灿',
+        },
+        {
+          time:'2021-10-20',
+          buyer:'xx',
+          productName:'绿茶',
+          channel:'店面',
+          quantity:'1000g',
+          amount:360,
+          seller:'彭旭灿',
+        },
+      ],
+
+
+      salesForm:{
+        time:'',
+        buyer:'',
+        productName:'',
+        channel:'',
+        quantity:'',
+        amount:'',
+        seller:'',
+      },
+      rules: {
+        // time: [{required: true, message: '销售日期必选', trigger: 'blur'}],
+        // buyer: [{required: true, message: '必填', trigger: 'blur'}],
+        productName: [{required: true, message: '产品名称必选', trigger: 'change'}],
+        channel: [{required: true, message: '销售途径必选', trigger: 'change'}],
+        quantity: [{required: true, message: '购买数量必填', trigger: 'blur'}],
+        amount: [{required: true, message: '购买金额必填', trigger: 'blur'}],
+        seller: [{required: true, message: '销售人员必选', trigger: 'change'}],
+      },
+      editIndex:0,
+      modelType:'add',
+      showModel:false,
+      prodFlag:false,
+      channelFlag:false,
+      sellerFlag:false,
+      currentUnit:'g',
+      page:1,
+
+
+    }
+  },
+  methods:{
+    validateFlag(){
+      this.prodFlag = this.salesForm.productName === ''
+      this.channelFlag = this.salesForm.channel === ''
+      this.sellerFlag = this.salesForm.seller === ''
+    },
+    confirmEdit(formName) {
+      this.validateFlag()
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.showModel = false
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      })
+    },
+    addSales(){
+      this.salesForm.time = this.utils.setTimeFilter(new Date())
+      console.log(this.salesForm.time);
+      this.showModel = true
+      this.$nextTick(()=>{
+        this.$refs.salesForm.clearValidate()
+      })
+
+    },
+
+    pageSizeChange(){
+
+    },
+    pageChange(){
+
+    },
+  },
+  mounted() {
+
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.sales{
+  width: 100%;
+  height: 100%;
+  .searchBox{
+    position: relative;
+    background: #fff;
+    box-shadow: 0 2px 14px 0 rgba(14, 33, 66, 0.06);
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 10px;
+    .searchItem{
+      width: 25%;
+      height: 44px;
+      line-height: 44px;
+      display: flex;
+      float: left;
+      .searchLabel{
+        width: 80px;
+        text-align: right;
+        font-size: 14px;
+      }
+      .dropTree{
+        display: inline-block;
+        flex: 1;
+      }
+      .currentInput{
+        padding:0 14px;
+        display: inline-block;
+        flex: 1;
+      }
+      /deep/.el-range-editor--mini.el-input__inner{
+        width: 100%;
+      }
+
+    }
+    .searchBtn{
+      position: absolute;
+      right: 0;
+      bottom: 10px;
+      padding-right: 24px;
+    }
+  }
+  /deep/.el-form-item__content{
+    padding: 0 28px 0 0;
+    .dropTree{
+      padding: 0;
+      &.dropError{
+        .dropTree-model{
+          border: 1px solid red;
+        }
+      }
+    }
+  }
+  .quantityBox{
+    position: relative;
+    .unit{
+      position: absolute;
+      top: 0;
+      right: 10px;
+    }
+
+  }
+  .salesMain{
+    position: relative;
+    background: #fff;
+    box-shadow: 0 2px 14px 0 rgba(14, 33, 66, 0.06);
+    border-radius: 6px;
+    padding: 10px;
+    //width: 100%;
+    height:calc(100vh - 250px);
+    //box-sizing: border-box;
+    /deep/.el-pagination{
+      text-align: right;
+      padding: 14px 20px;
+    }
+
+  }
+}
+</style>

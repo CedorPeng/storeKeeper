@@ -13,6 +13,62 @@
       "unicode_decimal": 983212
     },
     {
+      "icon_id": "29937",
+      "name": "phone",
+      "font_class": "phone",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "33516",
+      "name": "home",
+      "font_class": "home",
+      "unicode": "e6b8",
+      "unicode_decimal": 59064
+    },
+    {
+      "icon_id": "973699",
+      "name": "name",
+      "font_class": "name",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "1133735",
+      "name": "设置",
+      "font_class": "icon5",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "1219231",
+      "name": "eglass-adress",
+      "font_class": "adress",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "1336080",
+      "name": "name",
+      "font_class": "name1",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "1462917",
+      "name": "setting",
+      "font_class": "setting",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "2142880",
+      "name": "Stocking",
+      "font_class": "Stocking",
+      "unicode": "e6c2",
+      "unicode_decimal": 59074
+    },
+    {
       "icon_id": "2678600",
       "name": "个人中心",
       "font_class": "gerenzhongxin",
@@ -20,11 +76,95 @@
       "unicode_decimal": 58953
     },
     {
+      "icon_id": "4766292",
+      "name": "addteam",
+      "font_class": "addteam",
+      "unicode": "e7ae",
+      "unicode_decimal": 59310
+    },
+    {
+      "icon_id": "5119332",
+      "name": "delete",
+      "font_class": "delete",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "5809180",
+      "name": "管理员",
+      "font_class": "guanliyuan",
+      "unicode": "e68a",
+      "unicode_decimal": 59018
+    },
+    {
+      "icon_id": "5875523",
+      "name": "rename",
+      "font_class": "rename",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "10970262",
+      "name": "Phone",
+      "font_class": "Phone",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "11441202",
+      "name": "仓库库存",
+      "font_class": "cangkukucun",
+      "unicode": "e633",
+      "unicode_decimal": 58931
+    },
+    {
+      "icon_id": "11808120",
+      "name": "sale canter",
+      "font_class": "salecanter",
+      "unicode": "e6c4",
+      "unicode_decimal": 59076
+    },
+    {
+      "icon_id": "12183085",
+      "name": "进货车",
+      "font_class": "jinhuoche",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "14196182",
+      "name": "adress_icon_local",
+      "font_class": "adress_icon_local",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "15838477",
+      "name": "file-add",
+      "font_class": "file-add",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
       "icon_id": "17784717",
       "name": "茶壶茶杯",
       "font_class": "chahuchabei",
       "unicode": "e623",
       "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "18858639",
+      "name": "出口管理",
+      "font_class": "chukouguanli",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "23060493",
+      "name": "入库单",
+      "font_class": "rukudan",
+      "unicode": "e9fe",
+      "unicode_decimal": 59902
     },
     {
       "icon_id": "23451644",

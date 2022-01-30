@@ -4,18 +4,20 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui';
-import VChart from 'v-charts-v2';
+import VCharts from 'v-charts'
 import 'element-ui/lib/theme-chalk/index.css';
 import clickoutside from '@/util/clickoutside';
 import './assets/iconfont/iconfont.css'
 import less from 'less'
+import CedorUtils from './util/index'
 
 Vue.use(less)
 Vue.use(ElementUI);
-Vue.use(VChart);
+Vue.use(VCharts);
 Vue.directive('clickoutside', clickoutside)
 
 Vue.config.productionTip = false
+Vue.prototype.utils = CedorUtils
 
 /* eslint-disable no-new */
 new Vue({

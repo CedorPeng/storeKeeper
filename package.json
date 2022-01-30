@@ -13,11 +13,11 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "echarts": "^5.2.2",
+    "echarts": "^4.9.0",
     "element-ui": "^2.15.6",
     "less": "^4.1.2",
     "less-loader": "^4.1.0",
-    "v-charts-v2": "^2.0.9",
+    "v-charts": "^1.19.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

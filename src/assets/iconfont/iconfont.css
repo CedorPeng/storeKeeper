@@ -1,6 +1,6 @@
 @font-face {
   font-family: "iconfont"; /* Project id  */
-  src: url('iconfont.ttf?t=1639289637885') format('truetype');
+  src: url('iconfont.ttf?t=1640245838847') format('truetype');
 }
 
 .iconfont {
@@ -15,12 +15,92 @@
   content: "\f00ac";
 }
 
+.icon-phone:before {
+  content: "\e652";
+}
+
+.icon-home:before {
+  content: "\e6b8";
+}
+
+.icon-name:before {
+  content: "\e60b";
+}
+
+.icon-icon5:before {
+  content: "\e604";
+}
+
+.icon-adress:before {
+  content: "\e600";
+}
+
+.icon-name1:before {
+  content: "\e60c";
+}
+
+.icon-setting:before {
+  content: "\e63f";
+}
+
+.icon-Stocking:before {
+  content: "\e6c2";
+}
+
 .icon-gerenzhongxin:before {
   content: "\e649";
 }
 
+.icon-addteam:before {
+  content: "\e7ae";
+}
+
+.icon-delete:before {
+  content: "\e63c";
+}
+
+.icon-guanliyuan:before {
+  content: "\e68a";
+}
+
+.icon-rename:before {
+  content: "\e62a";
+}
+
+.icon-Phone:before {
+  content: "\e607";
+}
+
+.icon-cangkukucun:before {
+  content: "\e633";
+}
+
+.icon-salecanter:before {
+  content: "\e6c4";
+}
+
+.icon-jinhuoche:before {
+  content: "\e605";
+}
+
+.icon-adress_icon_local:before {
+  content: "\e622";
+}
+
+.icon-file-add:before {
+  content: "\e66f";
+}
+
 .icon-chahuchabei:before {
   content: "\e623";
+}
+
+.icon-chukouguanli:before {
+  content: "\e60f";
+}
+
+.icon-rukudan:before {
+  content: "\e9fe";
 }
 
 .icon-yezi:before {
