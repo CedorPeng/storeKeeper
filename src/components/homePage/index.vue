@@ -73,14 +73,24 @@
         </div>
       </el-col>
     </el-row>
+    <chartsDetails v-if="showCharts"></chartsDetails>
   </div>
 </template>
 
 <script>
+  import chartsDetails from '../public/chartsDetails/index'
+  import tableDetails from '../public/tableDetails/index'
 export default {
   name: 'homePage',
+  components:{
+    chartsDetails,
+    tableDetails
+  },
   data () {
     return {
+      //详情部分
+      showCharts:false,
+      showTable:false,
       channelChart:{
         timeType:'days',
         data:{

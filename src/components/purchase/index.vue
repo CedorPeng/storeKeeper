@@ -498,7 +498,7 @@
       border-radius: 6px;
       padding: 10px;
       //width: 100%;
-      height:calc(100vh - 250px);
+      height:calc(100vh - 240px);
       //box-sizing: border-box;
       /deep/.el-pagination{
         text-align: right;

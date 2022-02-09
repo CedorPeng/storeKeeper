@@ -4,7 +4,7 @@
     <div class="setBox">
       <el-button style="position: relative;padding-right: 26px" type="primary" plain size="mini"  @click="addTree('')">
         添加产品
-        <i class="iconfont icon-addteam"></i>
+        <i class="iconfont icon-file-add"></i>
       </el-button>
     </div>
     <div style="width: 400px; margin-bottom: 15px">
@@ -209,7 +209,7 @@
       position: absolute;
       top: -49px;
       right: 0;
-      .icon-addteam{
+      .iconfont{
         position: absolute;
         top: 5px;
         right: 10px;

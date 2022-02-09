@@ -22,7 +22,7 @@
         :data="stockData"
         border
         style="width: 99%"
-        height="calc(100vh - 236px)">
+        height="calc(100vh - 240px)">
         <el-table-column
           prop="productName"
           align="center"
