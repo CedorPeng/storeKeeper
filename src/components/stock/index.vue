@@ -26,20 +26,24 @@
         <el-table-column
           prop="productName"
           align="center"
+          :resizable="false"
           label="产品名称">
         </el-table-column>
         <el-table-column
           prop="productType"
           align="center"
+          :resizable="false"
           label="产品类型">
         </el-table-column>
         <el-table-column
           prop="quantity"
           align="center"
+          :resizable="false"
           label="库存数量">
         </el-table-column>
         <el-table-column
           prop="batch"
+          :resizable="false"
           align="center"
           label="进货批次">
         </el-table-column>

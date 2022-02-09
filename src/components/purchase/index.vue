@@ -73,22 +73,26 @@
         <el-table-column
           prop="time"
           width="160"
+          :resizable="false"
           align="center"
           label="采购批次">
         </el-table-column>
         <el-table-column
           prop="buyer"
           width="160"
+          :resizable="false"
           align="center"
           label="采购时间">
         </el-table-column>
         <el-table-column
           prop="productName"
+          :resizable="false"
           align="center"
           label="产品名称">
         </el-table-column>
         <el-table-column
           width="160"
+          :resizable="false"
           align="center"
           label="采购数量">
           <template slot-scope="scope">
@@ -97,18 +101,21 @@
         </el-table-column>
         <el-table-column
           prop="quantity"
+          :resizable="false"
           width="120"
           align="center"
           label="采购金额">
         </el-table-column>
         <el-table-column
           prop="amount"
+          :resizable="false"
           width="120"
           align="center"
           label="采购人员">
         </el-table-column>
         <el-table-column
           label="操作"
+          :resizable="false"
           width="100">
           <template slot-scope="scope">
             <el-button type="text" size="small">编辑</el-button>

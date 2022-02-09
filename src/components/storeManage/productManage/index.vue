@@ -13,20 +13,56 @@
       </el-input>
     </div>
     <div class="treeBox">
-      <el-tree
-        ref="allTree"
+<!--      <el-tree-->
+<!--        ref="allTree"-->
+<!--        :data="data"-->
+<!--        :filter-node-method="filterNode"-->
+<!--        node-key="value">-->
+<!--      <span class="treeItem" slot-scope="{ node, data }">-->
+<!--        <span>{{ node.label }}</span>-->
+<!--        <span>-->
+<!--          <i v-if="!data.children || (data.children && data.children.length === 0)" class="el-icon-remove-outline" @click.stop="remove(data)"></i>-->
+<!--          <i class="el-icon-circle-plus-outline" @click.stop="addTree(data)"></i>-->
+<!--          <i class="el-icon-edit-outline" @click.stop="editProduct(data)"></i>-->
+<!--        </span>-->
+<!--      </span>-->
+<!--      </el-tree>-->
+      <el-table
         :data="data"
-        :filter-node-method="filterNode"
-        node-key="value">
-      <span class="treeItem" slot-scope="{ node, data }">
-        <span>{{ node.label }}</span>
-        <span>
-          <i v-if="!data.children || (data.children && data.children.length === 0)" class="el-icon-remove-outline" @click.stop="remove(data)"></i>
-          <i class="el-icon-circle-plus-outline" @click.stop="addTree(data)"></i>
-          <i class="el-icon-edit-outline" @click.stop="editProduct(data)"></i>
-        </span>
-      </span>
-      </el-tree>
+        height="calc(100vh - 200px)"
+        row-key="value"
+        border
+        default-expand-all
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+        <el-table-column
+          prop="label"
+          width="300"
+          :resizable="false"
+          label="产品名称">
+        </el-table-column>
+        <el-table-column
+          prop="unit"
+          label="单位"
+          :resizable="false"
+          align="center"
+          width="60">
+        </el-table-column>
+        <el-table-column
+          prop="remark"
+          :resizable="false"
+          label="备注">
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          :resizable="false"
+          width="100">
+          <template slot-scope="scope">
+<!--            <el-button type="text" size="small" @click.stop="editProduct(scope.row)">添加产品</el-button>-->
+            <el-button type="text" size="small" @click.stop="editProduct(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" v-if="!scope.row.children || (scope.row.children && scope.row.children.length === 0)" @click.stop="remove(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <el-dialog
       title="添加产品"
@@ -96,7 +132,8 @@
                 label: '三级 1-1-2'
               }]
             }]
-          }, {
+          },
+          {
             value: 2,
             unit:'g',
             remark:'',
@@ -110,7 +147,8 @@
               remark:'',
               label: '二级 2-2'
             }]
-          }, {
+          },
+          {
             value: 3,
             unit:'g',
             remark:'',
@@ -127,7 +165,7 @@
               remark:'',
               label: '二级 3-2'
             }]
-          }
+          },
         ],
         addModel:false,
         parentId:'',

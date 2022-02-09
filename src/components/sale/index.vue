@@ -71,12 +71,14 @@
         <el-table-column
           prop="time"
           width="160"
+          :resizable="false"
           align="center"
           label="销售时间">
         </el-table-column>
         <el-table-column
           prop="buyer"
           width="160"
+          :resizable="false"
           align="center"
           label="购买客户">
         </el-table-column>
@@ -88,29 +90,34 @@
         <el-table-column
           prop="channel"
           width="160"
+          :resizable="false"
           align="center"
           label="购买渠道">
         </el-table-column>
         <el-table-column
           prop="quantity"
           width="120"
+          :resizable="false"
           align="center"
           label="购买数量">
         </el-table-column>
         <el-table-column
           prop="amount"
           width="120"
+          :resizable="false"
           align="center"
           label="购买金额">
         </el-table-column>
         <el-table-column
           prop="seller"
           width="120"
+          :resizable="false"
           align="center"
           label="销售人员">
         </el-table-column>
         <el-table-column
           label="操作"
+          :resizable="false"
           width="100">
           <template slot-scope="scope">
             <el-button type="text" size="small">编辑</el-button>
