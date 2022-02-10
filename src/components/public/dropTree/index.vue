@@ -58,8 +58,8 @@
         <el-scrollbar>
           <el-input v-model="searchValue" placeholder="filter" v-if="filter"></el-input>
           <div class="dropTree-utils" v-if="checkAll">
-            <span class="dropTree-util__selectAll fl" @click="allSet(true)">Select All</span>
-            <span class="dropTree-util__selectNone fr" @click="allSet(false)">None</span>
+            <span class="dropTree-util__selectAll fl" @click="allSet(true)">全选</span>
+            <span class="dropTree-util__selectNone fr" @click="allSet(false)">取消</span>
           </div>
           <el-tree
             v-if="multiple"

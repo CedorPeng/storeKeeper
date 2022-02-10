@@ -15,7 +15,6 @@
       <div class="searchItem">
         <div class="searchLabel">采购时间：</div>
         <div class="currentInput">
-          <!--          <el-input v-model="purchaseTime" placeholder="请输入客户名称" size="mini" clearable></el-input>-->
           <el-date-picker
             size="mini"
             v-model="purchaseSearch.time"
@@ -59,35 +58,37 @@
         ></dropTree>
       </div>
       <div class="searchBtn">
-        <el-button size="mini" type="primary" @click="addSales">新增采购记录</el-button>
+        <el-button size="mini" type="primary" @click="addSales">新增采购</el-button>
         <el-button size="mini" type="primary" plain>重 置</el-button>
-        <el-button size="mini" type="primary">查 询</el-button>
+        <el-button size="mini" type="primary" @click="searchTable">查 询</el-button>
       </div>
     </div>
     <div class="purchaseMain">
       <el-table
         :data="purchaseData"
-        border
         style="width: 99%"
-        height="calc(100vh - 284px)">
+        height="calc(100vh - 284px)"
+        row-key="id"
+        border
+        default-expand-all
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
         <el-table-column
-          prop="time"
-          width="160"
+          width="120"
           :resizable="false"
-          align="center"
           label="采购批次">
+          <template slot-scope="scope">
+            {{scope.row.children ? scope.row.batch : ''}}
+          </template>
         </el-table-column>
         <el-table-column
-          prop="buyer"
+          prop="createTime"
           width="160"
           :resizable="false"
-          align="center"
           label="采购时间">
         </el-table-column>
         <el-table-column
-          prop="productName"
+          prop="product"
           :resizable="false"
-          align="center"
           label="产品名称">
         </el-table-column>
         <el-table-column
@@ -96,18 +97,18 @@
           align="center"
           label="采购数量">
           <template slot-scope="scope">
-            {{scope.row.channel}}g
+            {{scope.row.weight}}{{scope.row.unit}}
           </template>
         </el-table-column>
         <el-table-column
-          prop="quantity"
+          prop="amount"
           :resizable="false"
           width="120"
-          align="center"
+          align="right"
           label="采购金额">
         </el-table-column>
         <el-table-column
-          prop="amount"
+          prop="updateTime"
           :resizable="false"
           width="120"
           align="center"
@@ -117,7 +118,7 @@
           label="操作"
           :resizable="false"
           width="100">
-          <template slot-scope="scope">
+          <template slot-scope="scope" v-if="scope.row.children">
             <el-button type="text" size="small">编辑</el-button>
             <el-button type="text" size="small">删除</el-button>
           </template>
@@ -133,63 +134,100 @@
       </el-pagination>
     </div>
     <el-dialog
-      :title="modelType === 'add' ? '新增采购记录' : '编辑采购记录'"
+      :title="modelType === 'add' ? '新增' : '编辑'"
       :visible.sync="showModel"
-      width="580px">
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      width="880px">
       <span>
         <el-form ref="purchaseForm" label-position="right" :rules="rules" label-width="120px" :model="purchaseForm">
-          <el-form-item label="销售日期：" prop="time">
+          <el-form-item label="采购日期：" prop="time">
             <el-date-picker
               v-model="purchaseForm.time"
-              style="width: 100%;"
-              size="mini"
+              style="width: 288px;"
+              size="small"
               type="date"
               :clearable="false"
               placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
-          <el-form-item label="买家姓名：" prop="buyer">
-            <el-input v-model="purchaseForm.buyer" size="mini" placeholder="请输入买家姓名"></el-input>
+          <el-form-item label="采购人员：">
+            <el-select style="width: 288px;" size="small" v-model="purchaseForm.people" placeholder="请选择">
+              <el-option
+                v-for="item in createByList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="产品名称：" prop="productName">
+        </el-form>
+        <div>
+          <span class="detailsTitle">采购明细</span>
+          <el-button class="fr" style="margin-top: 10px" type="primary" size="small" @click="clickAddDetails">添加采购明细</el-button>
+        </div>
+        <el-table
+          :data="formTable"
+          border
+          style="width: 100%">
+          <el-table-column
+            prop="address"
+            label="产品名称">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="采购数量"
+            width="120">
+          </el-table-column>
+          <el-table-column
+            prop="date"
+            width="120"
+            label="采购金额">
+          </el-table-column>
+          <el-table-column
+            width="120"
+            label="操作">
+            <template slot-scope="scope">
+              <el-button type="text" size="small">编辑</el-button>
+              <el-button type="text" size="small">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+
+      </span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showModel = false">取 消</el-button>
+        <el-button type="primary" @click="confirmEdit('purchaseForm')">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      title="采购明细"
+      :visible.sync="addDetailsModel"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      width="500px">
+      <span>
+        <el-form ref="detailsForm" label-position="right" :rules="detailsRules" label-width="120px" :model="detailsForm">
+          <el-form-item label="采购产品：" prop="productName">
             <dropTree
               :class="prodFlag ? 'dropError' : ''"
               placeholder="请选择产品名称"
               clearable
               :options="productList"
-              v-model="purchaseForm.productName"
+              v-model="detailsForm.productName"
             ></dropTree>
           </el-form-item>
-          <el-form-item label="销售途径：" prop="channel">
-            <dropTree
-              :class="channelFlag ? 'dropError' : ''"
-              placeholder="请选择销售途径"
-              clearable
-              :options="channel.options"
-              v-model="purchaseForm.channel"
-            ></dropTree>
+          <el-form-item label="采购数量：" prop="number">
+            <el-input v-model="detailsForm.number" size="mini" placeholder="请输入采购数量"></el-input>
           </el-form-item>
-          <el-form-item class="quantityBox" label="购买数量：" prop="quantity">
-            <el-input v-model="purchaseForm.quantity" size="mini" placeholder="请输入购买数量"></el-input>
-            <div class="unit">{{currentUnit}}</div>
-          </el-form-item>
-          <el-form-item label="购买金额：" prop="amount">
-            <el-input v-model="purchaseForm.amount" size="mini" placeholder="请输入购买金额"></el-input>
-          </el-form-item>
-          <el-form-item label="销售人员：" prop="seller">
-            <dropTree
-              :class="sellerFlag ? 'dropError' : ''"
-              placeholder="请选择销售人员"
-              clearable
-              :options="channel.options"
-              v-model="purchaseForm.seller"
-            ></dropTree>
+          <el-form-item label="采购金额：" prop="amount">
+            <el-input v-model="detailsForm.amount" size="mini" placeholder="请输入采购金额"></el-input>
           </el-form-item>
         </el-form>
       </span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="showModel = false">取 消</el-button>
-        <el-button type="primary" @click="confirmEdit('purchaseForm')">确 定</el-button>
+        <el-button @click="addDetailsModel = false">取 消</el-button>
+        <el-button type="primary">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -230,12 +268,6 @@
           },
         ],
         productList:require('../../util/baseData').default.teaType,
-        channel:{
-          options:require('../../util/baseData').default.channel,
-          value:[]
-        },
-        buyer:'',
-        purchaseTime:'',
         createByList:[
           {
             label:'彭旭灿',
@@ -250,156 +282,57 @@
             value:'许佩清'
           },
         ],
-        purchaseData:[
-          {
-            time:'2021-10-20',
-            buyer:'xx',
-            productName:'绿茶',
-            channel:'店面',
-            quantity:'1000g',
-            amount:360,
-            seller:'彭旭灿',
-          },
-          {
-            time:'2021-10-20',
-            buyer:'xx',
-            productName:'绿茶',
-            channel:'店面',
-            quantity:'1000g',
-            amount:360,
-            seller:'彭旭灿',
-          },
-          {
-            time:'2021-10-20',
-            buyer:'xx',
-            productName:'绿茶',
-            channel:'店面',
-            quantity:'1000g',
-            amount:360,
-            seller:'彭旭灿',
-          },
-          {
-            time:'2021-10-20',
-            buyer:'xx',
-            productName:'绿茶',
-            channel:'店面',
-            quantity:'1000g',
-            amount:360,
-            seller:'彭旭灿',
-          },
-          {
-            time:'2021-10-20',
-            buyer:'xx',
-            productName:'绿茶',
-            channel:'店面',
-            quantity:'1000g',
-            amount:360,
-            seller:'彭旭灿',
-          },
-          {
-            time:'2021-10-20',
-            buyer:'xx',
-            productName:'绿茶',
-            channel:'店面',
-            quantity:'1000g',
-            amount:360,
-            seller:'彭旭灿',
-          },
-          {
-            time:'2021-10-20',
-            buyer:'xx',
-            productName:'绿茶',
-            channel:'店面',
-            quantity:'1000g',
-            amount:360,
-            seller:'彭旭灿',
-          },
-          {
-            time:'2021-10-20',
-            buyer:'xx',
-            productName:'绿茶',
-            channel:'店面',
-            quantity:'1000g',
-            amount:360,
-            seller:'彭旭灿',
-          },
-          {
-            time:'2021-10-20',
-            buyer:'xx',
-            productName:'绿茶',
-            channel:'店面',
-            quantity:'1000g',
-            amount:360,
-            seller:'彭旭灿',
-          },
-          {
-            time:'2021-10-20',
-            buyer:'xx',
-            productName:'绿茶',
-            channel:'店面',
-            quantity:'1000g',
-            amount:360,
-            seller:'彭旭灿',
-          },
-          {
-            time:'2021-10-20',
-            buyer:'xx',
-            productName:'绿茶',
-            channel:'店面',
-            quantity:'1000g',
-            amount:360,
-            seller:'彭旭灿',
-          },
-          {
-            time:'2021-10-20',
-            buyer:'xx',
-            productName:'绿茶',
-            channel:'店面',
-            quantity:'1000g',
-            amount:360,
-            seller:'彭旭灿',
-          },
-        ],
-
+        purchaseData:require('../../util/baseData').default.stocking,//批次表格数据
 
         purchaseForm:{
           time:'',
-          buyer:'',
-          productName:'',
-          channel:'',
-          quantity:'',
-          amount:'',
-          seller:'',
+          people:'',
         },
         rules: {
-          // time: [{required: true, message: '销售日期必选', trigger: 'blur'}],
-          // buyer: [{required: true, message: '必填', trigger: 'blur'}],
-          productName: [{required: true, message: '产品名称必选', trigger: 'change'}],
-          channel: [{required: true, message: '销售途径必选', trigger: 'change'}],
-          quantity: [{required: true, message: '购买数量必填', trigger: 'blur'}],
-          amount: [{required: true, message: '购买金额必填', trigger: 'blur'}],
-          seller: [{required: true, message: '销售人员必选', trigger: 'change'}],
+          time: [{required: true, message: '采购日期必选', trigger: 'blur'}],
         },
-        editIndex:0,
         modelType:'add',
         showModel:false,
-        prodFlag:false,
-        channelFlag:false,
-        sellerFlag:false,
-        currentUnit:'g',
         page:1,
+        formTable:[
+          {
+            date: '2016-05-02',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1518 弄'
+          },
+          {
+            date: '2016-05-02',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1518 弄'
+          },
+          {
+            date: '2016-05-02',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1518 弄'
+          },
+        ],
+
+        addDetailsModel:false,
+        prodFlag:true,//产品名称校验问题
+        detailsForm:{
+          productName:'',
+          number:'',
+          amount:''
+        },
+        detailsRules: {
+          productName: [{required: true, message: '产品名称必选', trigger: 'blur'}],
+          number: [{required: true, message: '采购数量必填', trigger: 'blur'}],
+          amount: [{required: true, message: '采购金额必填', trigger: 'blur'}],
+        },
 
 
       }
     },
     methods:{
-      validateFlag(){
-        this.prodFlag = this.purchaseForm.productName === ''
-        this.channelFlag = this.purchaseForm.channel === ''
-        this.sellerFlag = this.purchaseForm.seller === ''
+      clickAddDetails(){
+        this.addDetailsModel = true
       },
       confirmEdit(formName) {
-        this.validateFlag()
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.showModel = false
@@ -416,6 +349,9 @@
         this.$nextTick(()=>{
           this.$refs.purchaseForm.clearValidate()
         })
+
+      },
+      searchTable(){
 
       },
 
@@ -512,6 +448,28 @@
         padding: 14px 20px;
       }
 
+    }
+    .detailsTitle{
+      line-height: 24px;
+      font-size: 18px;
+      color: #303133;
+      margin:20px 20px 20px 0;
+      display: inline-block;
+    }
+    /deep/.el-form-item__content{
+      padding: 0 28px 0 0;
+      .dropTree{
+        padding: 0;
+        .dropTree-options{
+          left: 0;
+          top: 33px;
+        }
+        &.dropError{
+          .dropTree-model{
+            border: 1px solid red;
+          }
+        }
+      }
     }
   }
 </style>
