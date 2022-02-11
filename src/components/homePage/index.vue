@@ -80,6 +80,7 @@
 <script>
   import chartsDetails from '../public/chartsDetails/index'
   import tableDetails from '../public/tableDetails/index'
+  import * as api from '../../api/homepage'
 export default {
   name: 'homePage',
   components:{
@@ -149,10 +150,16 @@ export default {
     this.channelChange()
     this.teaTypeChange()
     this.timeChange()
+    this.getRequest()
   },
   methods:{
+    async getRequest(){
+      let res = await api.getDemo({})
+      if(res.status === 200){
+        console.log(res.data);
+      }
+    },
     channelChange(){
-      console.log(111);
       let name = {
         days:'channelDays',
         month:'channelMonth',

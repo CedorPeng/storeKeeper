@@ -10,6 +10,7 @@ import clickoutside from '@/util/clickoutside';
 import './assets/iconfont/iconfont.css'
 import less from 'less'
 import CedorUtils from './util/index'
+import axios from './util/axios'
 
 Vue.use(less)
 Vue.use(ElementUI);
@@ -18,6 +19,7 @@ Vue.directive('clickoutside', clickoutside)
 
 Vue.config.productionTip = false
 Vue.prototype.utils = CedorUtils
+Vue.prototype.axios = axios
 
 /* eslint-disable no-new */
 new Vue({
