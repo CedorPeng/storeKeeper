@@ -2,31 +2,12 @@
   <div class="productManage">
 <!--    <el-button size="small">添加产品</el-button>-->
     <div class="setBox">
-      <el-button style="position: relative;padding-right: 26px" type="primary" plain size="mini"  @click="addTree('')">
+      <el-button style="position: relative;padding-right: 26px" type="primary" plain size="mini"  @click="addProduct">
         添加产品
         <i class="iconfont icon-file-add"></i>
       </el-button>
     </div>
-<!--    <div style="width: 400px; margin-bottom: 15px">-->
-<!--      <el-input size="small" clearable placeholder="请输入产品名称" v-model="productSearch">-->
-<!--        <el-button slot="append" icon="el-icon-search" @click="searchProduct"></el-button>-->
-<!--      </el-input>-->
-<!--    </div>-->
     <div class="treeBox">
-<!--      <el-tree-->
-<!--        ref="allTree"-->
-<!--        :data="data"-->
-<!--        :filter-node-method="filterNode"-->
-<!--        node-key="value">-->
-<!--      <span class="treeItem" slot-scope="{ node, data }">-->
-<!--        <span>{{ node.label }}</span>-->
-<!--        <span>-->
-<!--          <i v-if="!data.children || (data.children && data.children.length === 0)" class="el-icon-remove-outline" @click.stop="remove(data)"></i>-->
-<!--          <i class="el-icon-circle-plus-outline" @click.stop="addTree(data)"></i>-->
-<!--          <i class="el-icon-edit-outline" @click.stop="editProduct(data)"></i>-->
-<!--        </span>-->
-<!--      </span>-->
-<!--      </el-tree>-->
       <el-table
         :data="productNameList"
         height="calc(100vh - 160px)"
@@ -77,11 +58,11 @@
               clearable
               :options="productNameList"
               :lastActive="false"
-              v-model="addForm.type"
+              v-model="addForm.parentId"
             ></dropTree>
           </el-form-item>
-          <el-form-item label="产品名称" prop="name">
-            <el-input size="small" placeholder="请输入产品名称" v-model="addForm.name"></el-input>
+          <el-form-item label="产品名称" prop="productName">
+            <el-input size="small" placeholder="请输入产品名称" v-model="addForm.productName"></el-input>
           </el-form-item>
           <el-form-item label="产品单位" prop="unit">
             <el-input size="small" placeholder="请输入单位" v-model="addForm.unit"></el-input>
@@ -101,6 +82,7 @@
 
 <script>
   import dropTree from '../../public/dropTree/index'
+  import Vue from "vue";
   export default {
     name: "index",
     components:{
@@ -113,48 +95,58 @@
         addModel:false,
         parentId:'',
         addForm:{
-          type:'',
-          name:'',
+          parentId:'',
+          productName:'',
           unit:'',
           remark:'',
         },
         addRules:{
-          name:[
+          productName:[
             { required: true, message: '请填写产品名称', trigger: 'blur' }
           ],
-          // unit:[
-          //   { required: true, message: '请填写产品单位', trigger: 'blur' }
-          // ],
         },
       }
     },
     methods:{
-      filterNode(value, data) {
-        if (!value) return true;
-        return data.label.indexOf(value) !== -1;
-      },
-      searchProduct(){
-        // console.log();
-        this.$refs.allTree.filter(this.productSearch.toLowerCase());
-      },
       editProduct(data) {
+        this.modelType = data.value
         let a = data.value.split('-')
-        this.addForm.type = a.slice(0,a.length - 1).join('-')
-        this.addForm.name = data.label
+        this.addForm.parentId = a.slice(0,a.length - 1).join('-')
+        this.addForm.productName = data.label
         this.addForm.unit = data.unit
         this.addForm.remark = data.remark
-        this.addProduct()
+        this.addModel = true
+        setTimeout(()=>{
+          this.$refs.addForm.clearValidate()
+        })
       },
-      addTree(data) {
-        console.log(data);
-        this.addForm.type = data ? data.value : ''
-        this.addForm.name = ''
+      addProduct(){
+        this.modelType = 'add'
+        this.addForm.parentId = ''
+        this.addForm.productName = ''
         this.addForm.unit = ''
         this.addForm.remark = ''
-        this.addProduct()
+        this.addModel = true
+        setTimeout(()=>{
+          this.$refs.addForm.clearValidate()
+        })
       },
-      remove(data) {
-        console.log(data);
+      confirmEdit() {
+        let params = {
+          ...this.addForm
+        }
+        if(this.modelType !== 'add') params.id = this.modelType
+        console.log(params);
+        this.$refs.addForm.validate((valid) => {
+          if (valid) {
+            this.showModel = false
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
+      remove() {
         this.$confirm('此操作将永久删除该产品信息, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -171,12 +163,6 @@
           });
         });
       },
-      addProduct(){
-        this.addModel = true
-        setTimeout(()=>{
-          this.$refs.addForm.clearValidate()
-        })
-      }
     }
   }
 </script>

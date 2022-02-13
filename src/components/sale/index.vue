@@ -378,6 +378,7 @@ export default {
     addSales(){
       this.salesForm.time = this.utils.setTimeFilter(new Date()) + ' 12:00:00'
       this.modelType = 'add'
+      this.prodFlag = false
       this.salesForm = {
         time:'',
         buyers:'',
@@ -397,6 +398,7 @@ export default {
     editSales(data){
       console.log(data);
       this.modelType = data.id
+      this.prodFlag = false
       this.salesForm = {
         time:data.time,
         buyers:data.buyers,

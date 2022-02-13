@@ -1,7 +1,7 @@
 <template>
   <div class="memberManage">
     <div class="setBox">
-      <el-button style="position: relative;padding-right: 26px" type="primary" plain size="mini" @click="addRole('add')">
+      <el-button style="position: relative;padding-right: 26px" type="primary" plain size="mini" @click="addMember">
         添加成员
         <i class="iconfont icon-addteam"></i>
       </el-button>
@@ -44,11 +44,11 @@
           align="center"
           label="创建时间">
         </el-table-column>
-        <el-table-column
-          prop="createBy"
-          align="center"
-          label="创建人">
-        </el-table-column>
+<!--        <el-table-column-->
+<!--          prop="createBy"-->
+<!--          align="center"-->
+<!--          label="创建人">-->
+<!--        </el-table-column>-->
         <el-table-column
           label="操作"
           width="100">
@@ -89,7 +89,7 @@
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="showModel = false">取 消</el-button>
-        <el-button type="primary" @click="confirmEdit('memberForm')">确 定</el-button>
+        <el-button type="primary" @click="confirmEdit">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -168,13 +168,16 @@ export default {
   methods:{
     editRole(row,index){
       console.log(row,'edit',index);
-      this.modelType = 'edit'
+      this.modelType = row.memberID
       this.editIndex = index
-      this.showModel = true
       this.memberForm.memberName = row.memberName
       this.memberForm.memberPhone = row.memberPhone
       this.memberForm.role = row.role
       this.memberForm.sex = row.sex
+      this.showModel = true
+      this.$nextTick(()=>{
+        this.$refs.memberForm.clearValidate()
+      })
     },
     deleteRole(row,index){
       this.$confirm('此操作将永久删除该员工, 是否继续?', '提示', {
@@ -194,8 +197,8 @@ export default {
         });
       });
     },
-    addRole(type){
-      this.modelType = type
+    addMember(){
+      this.modelType = 'add'
       this.showModel = true
       this.memberForm.memberName = ''
       this.memberForm.memberPhone = ''
@@ -205,11 +208,15 @@ export default {
         this.$refs.memberForm.clearValidate()
       })
     },
-    confirmEdit(formName) {
-      this.$refs[formName].validate((valid) => {
+    confirmEdit() {
+      let params = {
+        ...this.memberForm
+      }
+      if(this.modelType !== 'add') params.id = this.modelType
+      console.log(params);
+      this.$refs.memberForm.validate((valid) => {
         if (valid) {
           if(this.modelType === 'add'){
-            console.log(111);
             this.memberData.push({
               ...this.memberForm
             })
@@ -219,7 +226,6 @@ export default {
               ...this.memberForm
             })
           }
-          // this.memberData[this.editIndex] =
           this.showModel = false
         } else {
           console.log('error submit!!');

@@ -1,7 +1,7 @@
 <template>
   <div class="roleManage">
     <div class="setBox">
-      <el-button style="position: relative;padding-right: 26px" type="primary" plain size="mini" @click="addRole('add')">
+      <el-button style="position: relative;padding-right: 26px" type="primary" plain size="mini" @click="addRole">
         添加角色
         <i class="iconfont icon-addteam"></i>
       </el-button>
@@ -36,12 +36,12 @@
           align="center"
           label="创建时间">
         </el-table-column>
-        <el-table-column
-          prop="createBy"
-          width="120"
-          align="center"
-          label="创建人">
-        </el-table-column>
+<!--        <el-table-column-->
+<!--          prop="createBy"-->
+<!--          width="120"-->
+<!--          align="center"-->
+<!--          label="创建人">-->
+<!--        </el-table-column>-->
         <el-table-column
           label="操作"
           width="100">
@@ -75,7 +75,7 @@
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="showModel = false">取 消</el-button>
-        <el-button type="primary" @click="confirmEdit('roleForm')">确 定</el-button>
+        <el-button type="primary" @click="confirmModel">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -138,12 +138,11 @@ export default {
   },
   methods:{
     editRole(row,index){
-      console.log(row,'edit',index);
-      this.modelType = 'edit'
+      this.modelType = row.id
       this.editIndex = index
-      this.showModel = true
       this.roleForm.roleName = row.roleName
       this.roleForm.jurisdiction = row.jurisdiction
+      this.showModel = true
       this.$nextTick(()=>{
         this.$refs.roleForm.clearValidate()
       })
@@ -166,8 +165,8 @@ export default {
         });
       });
     },
-    addRole(type){
-      this.modelType = type
+    addRole(){
+      this.modelType = 'add'
       this.showModel = true
       this.roleForm.roleName = ''
       this.roleForm.jurisdiction = ''
@@ -175,20 +174,23 @@ export default {
         this.$refs.roleForm.clearValidate()
       })
     },
-    confirmEdit(formName) {
-      this.$refs[formName].validate((valid) => {
+    confirmModel() {
+      let params = {
+        ...this.roleForm
+      }
+      if(this.modelType !== 'add') params.id = this.modelType
+      console.log(params);
+      this.$refs.roleForm.validate((valid) => {
         if (valid) {
           if(this.modelType === 'add'){
-            this.roleData.push(
-
-            )
+            this.$message.success('添加成功')
+          }else{
+            Vue.set(this.roleData,this.editIndex,{
+              ...this.roleData[this.editIndex],
+              roleName: this.roleForm.roleName,
+              jurisdiction: this.roleForm.jurisdiction,
+            })
           }
-          Vue.set(this.roleData,this.editIndex,{
-            ...this.roleData[this.editIndex],
-            roleName: this.roleForm.roleName,
-            jurisdiction: this.roleForm.jurisdiction,
-          })
-          // this.roleData[this.editIndex] =
           this.showModel = false
         } else {
           console.log('error submit!!');
