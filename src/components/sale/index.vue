@@ -144,6 +144,7 @@
             <el-date-picker
               v-model="salesForm.time"
               size="mini"
+              style="width: 100%;"
               type="date"
               :clearable="false"
               placeholder="选择日期">
@@ -159,16 +160,18 @@
               clearable
               :options="productName.options"
               v-model="salesForm.productName"
+              @change="productValidate"
             ></dropTree>
           </el-form-item>
           <el-form-item label="销售途径：" prop="channel">
-            <dropTree
-              :class="channelFlag ? 'dropError' : ''"
-              placeholder="请选择销售途径"
-              clearable
-              :options="channel.options"
-              v-model="salesForm.channel"
-            ></dropTree>
+            <el-select size="mini" style="width: 100%;" v-model="salesForm.channel" placeholder="请选择销售途径">
+              <el-option
+                v-for="item in channel.options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item class="quantityBox" label="购买数量：" prop="quantity">
             <el-input v-model="salesForm.quantity" size="mini" placeholder="请输入购买数量"></el-input>
@@ -178,13 +181,14 @@
             <el-input v-model="salesForm.amount" size="mini" placeholder="请输入购买金额"></el-input>
           </el-form-item>
           <el-form-item label="销售人员：" prop="seller">
-            <dropTree
-              :class="sellerFlag ? 'dropError' : ''"
-              placeholder="请选择销售人员"
-              clearable
-              :options="channel.options"
-              v-model="salesForm.seller"
-            ></dropTree>
+            <el-select size="mini" style="width: 100%;" v-model="salesForm.seller" placeholder="请选择销售人员">
+              <el-option
+                v-for="item in channel.options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form>
       </span>
@@ -367,10 +371,11 @@ export default {
       modelType:'add',
       showModel:false,
       prodFlag:false,
-      channelFlag:false,
-      sellerFlag:false,
       currentUnit:'g',
       page:1,
+      unitObject:{
+
+      },
 
 
     }
@@ -378,8 +383,11 @@ export default {
   methods:{
     validateFlag(){
       this.prodFlag = this.salesForm.productName === ''
-      this.channelFlag = this.salesForm.channel === ''
-      this.sellerFlag = this.salesForm.seller === ''
+    },
+    productValidate(val){
+      this.prodFlag = val === ''
+      this.currentUnit = val === '' ? '' : this.unitObject[val]
+      this.$refs.salesForm.validateField('productName')
     },
     confirmEdit(formName) {
       this.validateFlag()
@@ -408,8 +416,19 @@ export default {
     pageChange(){
 
     },
+    getEveryUnit(array){
+      array.forEach(item=>{
+        this.unitObject[item.value] = item.unit
+        if(item.children && item.children.length !== 0){
+          this.getEveryUnit(item.children)
+        }
+      })
+    },
   },
   mounted() {
+    this.getEveryUnit(this.productName.options)
+    console.log(this.unitObject);
+
 
   }
 }
@@ -466,6 +485,14 @@ export default {
         .dropTree-model{
           border: 1px solid red;
         }
+      }
+      .dropTree-set{
+        right: 12px;
+        color: #C0C4CC;
+      }
+      .dropTree-options{
+        top: 38px;
+        left: 0;
       }
     }
   }

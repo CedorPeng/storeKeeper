@@ -21,6 +21,7 @@
             type="daterange"
             align="right"
             unlink-panels
+            value-format="yyyy-MM-dd"
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期">
@@ -59,8 +60,8 @@
       </div>
       <div class="searchBtn">
         <el-button size="mini" type="primary" @click="addSales">新增采购</el-button>
-        <el-button size="mini" type="primary" plain>重 置</el-button>
-        <el-button size="mini" type="primary" @click="searchTable">查 询</el-button>
+        <el-button size="mini" type="primary" plain @click="resetSearch">重 置</el-button>
+        <el-button size="mini" type="primary" @click="clickSearch">查 询</el-button>
       </div>
     </div>
     <div class="purchaseMain">
@@ -119,23 +120,22 @@
           :resizable="false"
           width="100">
           <template slot-scope="scope" v-if="scope.row.children">
-            <el-button type="text" size="small">编辑</el-button>
-            <el-button type="text" size="small">删除</el-button>
+            <el-button type="text" size="small" @click="editBatch(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="removeBatch(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination
-        @size-change="pageSizeChange"
         @current-change="pageChange"
-        :current-page.sync="page"
-        :page-size="10"
+        :current-page.sync="currentPage"
+        :page-size="pageSize"
         layout="prev, pager, next, jumper"
-        :total="1000">
+        :total="pageCount">
       </el-pagination>
     </div>
     <el-dialog
       :title="modelType === 'add' ? '新增' : '编辑'"
-      :visible.sync="showModel"
+      :visible.sync="addBatchModel"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
       width="880px">
@@ -152,7 +152,7 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item label="采购人员：">
-            <el-select style="width: 288px;" size="small" v-model="purchaseForm.people" placeholder="请选择">
+            <el-select style="width: 288px;" size="small" v-model="purchaseForm.createPeople" placeholder="请选择采购人员">
               <el-option
                 v-for="item in createByList"
                 :key="item.value"
@@ -171,32 +171,39 @@
           border
           style="width: 100%">
           <el-table-column
-            prop="address"
+            prop="productName"
             label="产品名称">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="quantity"
             label="采购数量"
+            header-align="center"
+            align="right"
             width="120">
+            <template slot-scope="scope">
+              {{scope.row.quantity}}{{scope.row.unit}}
+            </template>
           </el-table-column>
           <el-table-column
-            prop="date"
+            prop="amount"
             width="120"
+            header-align="center"
+            align="right"
             label="采购金额">
           </el-table-column>
           <el-table-column
             width="120"
             label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="small">编辑</el-button>
-              <el-button type="text" size="small">删除</el-button>
+              <el-button type="text" size="small" @click="editDetails(scope.row,scope.$index)">编辑</el-button>
+              <el-button type="text" size="small" @click="removeDetails(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
 
       </span>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="showModel = false">取 消</el-button>
+        <el-button @click="addBatchModel = false">取 消</el-button>
         <el-button type="primary" @click="confirmEdit('purchaseForm')">确 定</el-button>
       </span>
     </el-dialog>
@@ -215,10 +222,12 @@
               clearable
               :options="productList"
               v-model="detailsForm.productName"
+              @change="productValidate"
             ></dropTree>
           </el-form-item>
-          <el-form-item label="采购数量：" prop="number">
-            <el-input v-model="detailsForm.number" size="mini" placeholder="请输入采购数量"></el-input>
+          <el-form-item class="quantityBox" label="采购数量：" prop="quantity">
+            <el-input v-model="detailsForm.quantity" size="mini" placeholder="请输入采购数量"></el-input>
+            <div class="unit">{{currentUnit}}</div>
           </el-form-item>
           <el-form-item label="采购金额：" prop="amount">
             <el-input v-model="detailsForm.amount" size="mini" placeholder="请输入采购金额"></el-input>
@@ -227,7 +236,7 @@
       </span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDetailsModel = false">取 消</el-button>
-        <el-button type="primary">确 定</el-button>
+        <el-button type="primary" @click="confirmDetails">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -243,8 +252,6 @@
     },
     data(){
       return {
-        minMoney:0,
-        maxMoney:0,
         purchaseSearch:{
           batch:[],
           product:[],
@@ -286,56 +293,148 @@
 
         purchaseForm:{
           time:'',
-          people:'',
+          createPeople:'',
         },
         rules: {
           time: [{required: true, message: '采购日期必选', trigger: 'blur'}],
         },
         modelType:'add',
-        showModel:false,
-        page:1,
+        addBatchModel:false,
+        currentPage:1,
+        pageSize:5,
+        pageCount:15,
         formTable:[
           {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
+            productName: '味一堂凤庆古树滇红茶特级',
+            productId:'H1-6-3',
+            unit:'g',
+            quantity: '3000',
+            amount: '10000'
           },
           {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
+            productName: '王大榜特级滇红大金针',
+            productId:'H1-6-4',
+            unit:'g',
+            quantity: '10000',
+            amount: '40000'
           },
           {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
+            productName: '芯轩云南凤庆滇红茶',
+            unit:'盒',
+            productId:'H1-6-5',
+            quantity: '20',
+            amount: '7000'
           },
         ],
 
         addDetailsModel:false,
-        prodFlag:true,//产品名称校验问题
+        prodFlag:false,//产品名称校验问题
         detailsForm:{
           productName:'',
-          number:'',
+          quantity:'',
           amount:''
         },
         detailsRules: {
           productName: [{required: true, message: '产品名称必选', trigger: 'blur'}],
-          number: [{required: true, message: '采购数量必填', trigger: 'blur'}],
+          quantity: [{required: true, message: '采购数量必填', trigger: 'blur'}],
           amount: [{required: true, message: '采购金额必填', trigger: 'blur'}],
         },
+        currentUnit:'',
+        unitObject:{},
+        nameObject:{},
+        editDetailsIndex:null,
+
 
 
       }
     },
     methods:{
-      clickAddDetails(){
+      editDetails(data,index){
+        console.log(data);
+        this.detailsForm.productName = data.productId
+        this.editDetailsIndex = index
+        this.detailsForm.quantity = data.quantity
+        this.detailsForm.amount = data.amount
+        this.prodFlag = false
         this.addDetailsModel = true
+        this.$nextTick(()=>{
+          this.$refs.detailsForm.clearValidate()
+        })
+      },
+      removeDetails(index){
+        this.$confirm('此操作将永久删除该采购明细, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.formTable.splice(index,1)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+      productValidate(val){
+        this.prodFlag = val === ''
+        this.currentUnit = val === '' ? '' : this.unitObject[val]
+        this.$refs.detailsForm.validateField('productName')
+      },
+      clickAddDetails(){
+        this.editDetailsIndex = null
+        this.detailsForm.productName = ''
+        this.detailsForm.quantity = ''
+        this.detailsForm.amount = ''
+        this.prodFlag = false
+        this.addDetailsModel = true
+        this.$nextTick(()=>{
+          this.$refs.detailsForm.clearValidate()
+        })
       },
       confirmEdit(formName) {
+        let params = {
+          time: this.purchaseForm.time,
+          createPeople: this.purchaseForm.createPeople,
+          children:this.formTable.map(item=>{
+            return {
+              ...item,
+            }
+          })
+        }
+        if(this.modelType !== 'add'){
+          params.id = this.modelType
+        }
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.showModel = false
+            console.log(params);
+            this.addBatchModel = false
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        })
+      },
+      confirmDetails() {
+        this.prodFlag = this.detailsForm.productName === ''
+        this.$refs.detailsForm.validate((valid) => {
+          if (valid) {
+            this.addDetailsModel = false
+            let addDetails = {
+              productName: this.nameObject[this.detailsForm.productName],
+              productId:this.detailsForm.productName,
+              unit: this.unitObject[this.detailsForm.productName],
+              quantity: this.detailsForm.quantity,
+              amount: this.detailsForm.amount
+            }
+            if (this.editDetailsIndex !== null){
+              Vue.set(this.formTable,this.editDetailsIndex,addDetails)
+            }else{
+              this.formTable.push(addDetails)
+            }
           } else {
             console.log('error submit!!');
             return false;
@@ -344,26 +443,91 @@
       },
       addSales(){
         this.purchaseForm.time = this.utils.setTimeFilter(new Date())
-        console.log(this.purchaseForm.time);
-        this.showModel = true
+        this.addBatchModel = true
         this.$nextTick(()=>{
           this.$refs.purchaseForm.clearValidate()
         })
 
       },
-      searchTable(){
-
+      resetSearch(){
+        this.purchaseSearch = {
+          batch:[],
+          product:[],
+          minMoney: 0,
+          maxMoney: 0,
+          time:'',
+          createBy:[],
+        }
       },
-
-      pageSizeChange(){
-
+      clickSearch(){
+        this.currentPage = 1
+        this.searchTable()
       },
       pageChange(){
+        this.searchTable()
+      },
+      searchTable(){
+        let pageSize = this.purchaseSearch.product.length !== 0 || this.purchaseSearch.createBy.length !== 0 || this.purchaseSearch.minMoney !== 0 || this.purchaseSearch.maxMoney !== 0 ? 100 : 5
+        let params = {
+          ...this.purchaseSearch,
+          pageSize,
+          page:this.currentPage,
+        }
+        console.log(params, '查询表格');
+      },
+      editBatch(data){
+        console.log(data);
+        this.modelType = data.id
+        this.purchaseForm.time = data.createTime
+        // this.purchaseForm.createPeople = data.createPeople
+        this.formTable = data.children.map(item=>{
+          return {
+            productName: '味一堂凤庆古树滇红茶特级',
+            // productName: this.nameObject[item.productId],
+            productId:'H1-6-3',
+            // productId:item.productId,
+            unit:item.unit,
+            // quantity: item.quantity,
+            quantity: item.weight,
+            amount: item.amount
+          }
+        })
+        this.addBatchModel = true
+        this.$nextTick(()=>{
+          this.$refs.purchaseForm.clearValidate()
+        })
+      },
+      removeBatch(data){
+        this.$confirm('此操作将永久删除该批次信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          console.log(data.id,'删除批次');
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
 
+      },
+      getEveryUnit(array){
+        array.forEach(item=>{
+          this.unitObject[item.value] = item.unit
+          this.nameObject[item.value] = item.label
+          if(item.children && item.children.length !== 0){
+            this.getEveryUnit(item.children)
+          }
+        })
       },
     },
     mounted() {
-
+      this.getEveryUnit(this.productList)
     }
   }
 </script>
@@ -432,7 +596,6 @@
         top: 0;
         right: 10px;
       }
-
     }
     .purchaseMain{
       position: relative;
@@ -462,7 +625,11 @@
         padding: 0;
         .dropTree-options{
           left: 0;
-          top: 33px;
+          top: 38px;
+        }
+        .dropTree-set{
+          right: 12px;
+          color: #C0C4CC;
         }
         &.dropError{
           .dropTree-model{

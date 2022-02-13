@@ -7,11 +7,11 @@
         <i class="iconfont icon-file-add"></i>
       </el-button>
     </div>
-    <div style="width: 400px; margin-bottom: 15px">
-      <el-input size="small" clearable placeholder="请输入产品名称" v-model="productSearch">
-        <el-button slot="append" icon="el-icon-search" @click="searchProduct"></el-button>
-      </el-input>
-    </div>
+<!--    <div style="width: 400px; margin-bottom: 15px">-->
+<!--      <el-input size="small" clearable placeholder="请输入产品名称" v-model="productSearch">-->
+<!--        <el-button slot="append" icon="el-icon-search" @click="searchProduct"></el-button>-->
+<!--      </el-input>-->
+<!--    </div>-->
     <div class="treeBox">
 <!--      <el-tree-->
 <!--        ref="allTree"-->
@@ -28,15 +28,15 @@
 <!--      </span>-->
 <!--      </el-tree>-->
       <el-table
-        :data="data"
-        height="calc(100vh - 200px)"
+        :data="productNameList"
+        height="calc(100vh - 160px)"
         row-key="value"
         border
         default-expand-all
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
         <el-table-column
           prop="label"
-          width="300"
+          width="400"
           :resizable="false"
           label="产品名称">
         </el-table-column>
@@ -75,19 +75,19 @@
               class="productSelect"
               placeholder="产品种类"
               clearable
-              :options="data"
+              :options="productNameList"
               :lastActive="false"
               v-model="addForm.type"
             ></dropTree>
           </el-form-item>
           <el-form-item label="产品名称" prop="name">
-            <el-input size="small" v-model="addForm.name"></el-input>
+            <el-input size="small" placeholder="请输入产品名称" v-model="addForm.name"></el-input>
           </el-form-item>
           <el-form-item label="产品单位" prop="unit">
-            <el-input size="small" v-model="addForm.unit"></el-input>
+            <el-input size="small" placeholder="请输入单位" v-model="addForm.unit"></el-input>
           </el-form-item>
           <el-form-item label="产品备注">
-            <el-input type="textarea" :rows="6" :resize="'none'" v-model="addForm.remark"></el-input>
+            <el-input type="textarea" placeholder="请输入备注" :rows="6" :resize="'none'" v-model="addForm.remark"></el-input>
           </el-form-item>
         </el-form>
       </span>
@@ -109,64 +109,7 @@
     data(){
       return {
         productSearch:'',
-        data:[
-          {
-            value: 1,
-            label: '一级 1',
-            unit:'g',
-            remark:'123',
-            children: [{
-              value: 4,
-              label: '二级 1-1',
-              unit:'g',
-              remark:'',
-              children: [{
-                value: 9,
-                unit:'g',
-                remark:'',
-                label: '三级 1-1-1'
-              }, {
-                value: 10,
-                unit:'g',
-                remark:'',
-                label: '三级 1-1-2'
-              }]
-            }]
-          },
-          {
-            value: 2,
-            unit:'g',
-            remark:'',
-            label: '一级 2',
-            children: [{
-              value: 5,
-              label: '二级 2-1'
-            }, {
-              value: 6,
-              unit:'g',
-              remark:'',
-              label: '二级 2-2'
-            }]
-          },
-          {
-            value: 3,
-            unit:'g',
-            remark:'',
-            label: '一级 3',
-            children: [{
-              value: 7,
-              unit:'g',
-              remark:'',
-              label: '二级 3-1',
-              children:[]
-            }, {
-              value: 8,
-              unit:'g',
-              remark:'',
-              label: '二级 3-2'
-            }]
-          },
-        ],
+        productNameList:require('../../../util/baseData').default.teaType,
         addModel:false,
         parentId:'',
         addForm:{
@@ -179,9 +122,9 @@
           name:[
             { required: true, message: '请填写产品名称', trigger: 'blur' }
           ],
-          unit:[
-            { required: true, message: '请填写产品单位', trigger: 'blur' }
-          ],
+          // unit:[
+          //   { required: true, message: '请填写产品单位', trigger: 'blur' }
+          // ],
         },
       }
     },
@@ -195,8 +138,8 @@
         this.$refs.allTree.filter(this.productSearch.toLowerCase());
       },
       editProduct(data) {
-        console.log(data);
-        this.addForm.type = data.value
+        let a = data.value.split('-')
+        this.addForm.type = a.slice(0,a.length - 1).join('-')
         this.addForm.name = data.label
         this.addForm.unit = data.unit
         this.addForm.remark = data.remark
