@@ -20,7 +20,6 @@
             <ve-line
               ref="channelChart"
               :data="channelChart.data"
-              :extend="channelChart.extend"
               height="calc(50vh - 80px)"
               :settings="channelChart.settings"
             ></ve-line>
@@ -83,7 +82,7 @@
         </div>
       </el-col>
     </el-row>
-    <chartsDetails v-if="showCharts" :type="screenType" @close="shrinkCharts"></chartsDetails>
+    <chartsDetails v-if="showCharts" :type="screenType" @close="shrinkCharts" @transferParams="getTableDetails"></chartsDetails>
   </div>
 </template>
 
@@ -114,22 +113,6 @@ export default {
             "PYQ": '朋友圈',
             "RQ": '人情'
           },
-        },
-        extend:{
-          dataZoom: [
-            {
-              type: 'slider',
-              height: '12',
-              start: 50,
-              end: 100
-            },
-            {
-              type: 'inside',
-              height: '12',
-              start: 50,
-              end: 100
-            }
-          ],
         },
       },
       teaTypeChart:{
@@ -232,6 +215,9 @@ export default {
         this.$refs.timeChart.echarts.resize()
       })
     },
+    getTableDetails(params){
+      console.log(params,'homePage getTableDetails');
+    }
   }
 }
 </script>

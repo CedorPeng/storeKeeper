@@ -1,8 +1,10 @@
 <template>
   <div class="Header clearfix">
     <div class="logo" @click="goHome">STORE KEEPER</div>
-    <div class="fr">
+    <div class="fr headerIcon">
       <i class="iconfont icon-gerenzhongxin" @click="goCenter"></i>
+      <i class="iconfont icon-xiaoxi"></i>
+      <span class="msgBox">{{messageNum}}</span>
     </div>
 
   </div>
@@ -11,6 +13,11 @@
 <script>
 export default {
   name: "Header",
+  data(){
+    return {
+      messageNum:1
+    }
+  },
   methods:{
     goHome(){
       this.$router.push({name:'homePage'})
@@ -40,10 +47,28 @@ export default {
     text-indent: 18px;
     cursor: pointer;
   }
-  .icon-gerenzhongxin{
-    font-size: 26px;
-    margin: 0 10px;
-    cursor: pointer;
+  .headerIcon{
+    position: relative;
+    padding-right: 10px;
+    .msgBox{
+      height: 16px;
+      line-height: 16px;
+      text-align: center;
+      width: 16px;
+      border-radius: 16px;
+      background: red;
+      color: #FFFFFF;
+      position: absolute;
+      top: 5px;
+      right: 16px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .iconfont{
+      font-size: 26px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
   }
 }
 

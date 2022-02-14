@@ -82,9 +82,6 @@ export default {
   padding: 0;
   font-family: Roboto-Medium;
 }
-.clearfix{
-
-}
 .fl{
   float:left;
 }
