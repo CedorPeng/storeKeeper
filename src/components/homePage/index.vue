@@ -12,11 +12,15 @@
                 <el-radio-button label="year">年</el-radio-button>
               </el-radio-group>
             </div>
+            <div class="fr screenIcon">
+              <i class="iconfont icon-fullscreen-expand" @click="fullScreen('channel')"></i>
+            </div>
           </div>
           <div class="chartMain">
             <ve-line
               ref="channelChart"
               :data="channelChart.data"
+              :extend="channelChart.extend"
               height="calc(50vh - 80px)"
               :settings="channelChart.settings"
             ></ve-line>
@@ -31,6 +35,9 @@
                 <el-radio-button label="month">月</el-radio-button>
                 <el-radio-button label="year">年</el-radio-button>
               </el-radio-group>
+            </div>
+            <div class="fr screenIcon">
+              <i class="iconfont icon-fullscreen-expand" @click="fullScreen('time')"></i>
             </div>
           </div>
           <div class="chartMain">
@@ -55,6 +62,9 @@
                 <el-radio-button label="year">年</el-radio-button>
               </el-radio-group>
             </div>
+            <div class="fr screenIcon">
+              <i class="iconfont icon-fullscreen-expand" @click="fullScreen('product')"></i>
+            </div>
           </div>
           <div class="chartMain">
             <ve-line
@@ -73,7 +83,7 @@
         </div>
       </el-col>
     </el-row>
-    <chartsDetails v-if="showCharts"></chartsDetails>
+    <chartsDetails v-if="showCharts" :type="screenType" @close="shrinkCharts"></chartsDetails>
   </div>
 </template>
 
@@ -90,8 +100,6 @@ export default {
   data () {
     return {
       //详情部分
-      showCharts:false,
-      showTable:false,
       channelChart:{
         timeType:'days',
         data:{
@@ -106,6 +114,22 @@ export default {
             "PYQ": '朋友圈',
             "RQ": '人情'
           },
+        },
+        extend:{
+          dataZoom: [
+            {
+              type: 'slider',
+              height: '12',
+              start: 50,
+              end: 100
+            },
+            {
+              type: 'inside',
+              height: '12',
+              start: 50,
+              end: 100
+            }
+          ],
         },
       },
       teaTypeChart:{
@@ -136,11 +160,16 @@ export default {
           },
         },
       },
+
+      //screen
+      showCharts:false,
+      showTable:false,
+      screenType:'',
     }
   },
   watch:{
     '$parent.toggleTrue':function (val){
-      this.channelChange()
+      // this.channelChange()
       // this.$refs.channelChart.echarts.resize()
       // this.$refs.teaTypeChart.echarts.resize()
       // this.$refs.timeChart.echarts.resize()
@@ -150,9 +179,20 @@ export default {
     this.channelChange()
     this.teaTypeChange()
     this.timeChange()
-    this.getRequest()
+    // this.getRequest()
   },
   methods:{
+    fullScreen(type){
+      this.screenType = type
+      this.showCharts = true
+
+    },
+    shrinkCharts(){
+      this.showCharts = false
+    },
+    shrinkTable(){
+      this.showTable = false
+    },
     async getRequest(){
       let res = await api.getDemo({})
       if(res.status === 200){
@@ -211,6 +251,16 @@ export default {
       font-size: 14px;
       font-weight: 700;
       padding-right: 20px;
+    }
+    .screenIcon{
+      margin-right: 15px;
+      color: #606266;
+      cursor: pointer;
+      font-weight: 400;
+      line-height: 32px;
+      &:hover{
+        color: #409eff;
+      }
     }
     .chartMain{
     }

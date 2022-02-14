@@ -2,23 +2,23 @@ export default {
   channel:[
     {
       label:'店面',
-      value:'店面',
+      value:'DM',
     },
     {
       label:'淘宝',
-      value:'淘宝',
+      value:'TB',
     },
     {
       label:'京东',
-      value:'京东',
+      value:'JD',
     },
     {
       label:'朋友圈',
-      value:'朋友圈',
+      value:'PYQ',
     },
     {
       label:'人情',
-      value:'人情',
+      value:'RQ',
     },
   ],
   teaType:[

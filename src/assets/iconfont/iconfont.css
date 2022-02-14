@@ -1,6 +1,8 @@
 @font-face {
-  font-family: "iconfont"; /* Project id  */
-  src: url('iconfont.ttf?t=1640245838847') format('truetype');
+  font-family: "iconfont"; /* Project id 3172597 */
+  src: url('iconfont.woff2?t=1644819849489') format('woff2'),
+       url('iconfont.woff?t=1644819849489') format('woff'),
+       url('iconfont.ttf?t=1644819849489') format('truetype');
 }
 
 .iconfont {
@@ -11,8 +13,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-fullscreen-shrink:before {
+  content: "\e676";
+}
+
+.icon-fullscreen-expand:before {
+  content: "\e675";
+}
+
 .icon-zhiwu:before {
-  content: "\f00ac";
+  content: "\e600";
 }
 
 .icon-phone:before {
@@ -27,12 +37,8 @@
   content: "\e60b";
 }
 
-.icon-icon5:before {
-  content: "\e604";
-}
-
 .icon-adress:before {
-  content: "\e600";
+  content: "\e601";
 }
 
 .icon-name1:before {
@@ -80,7 +86,7 @@
 }
 
 .icon-jinhuoche:before {
-  content: "\e605";
+  content: "\e604";
 }
 
 .icon-adress_icon_local:before {
