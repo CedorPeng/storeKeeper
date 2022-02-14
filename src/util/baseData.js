@@ -24,160 +24,234 @@ export default {
   teaType:[
     {
       label:'绿茶',
+      unit:'',
+      remark:'备注',
       value:'L1',
       children:[
         {
           label:'西湖龙井',
+          unit:'',
+          remark:'备注',
           value:'L1-1',
           children:[
             {
               label:'中狮口粮茶叶龙井',
+              unit:'g',
+              remark:'备注',
               value:'L1-1-1'
             },
             {
               label:'龙井茶礼盒装新茶雨前明前特级陶瓷罐',
+              unit:'罐',
+              remark:'备注',
               value:'L1-1-2'
             },
             {
               label:'西湖牌正宗雨前龙井茶',
+              unit:'g',
+              remark:'备注',
               value:'L1-1-3'
             },
             {
               label:'杭州狮峰山明前特级西湖龙井茶',
+              unit:'罐',
+              remark:'备注',
               value:'L1-1-4'
             },
             {
               label:'卢正浩明前特级西湖龙井茶',
+              unit:'g',
+              remark:'备注',
               value:'L1-1-5'
             },
           ]
         },
         {
           label:'铁观音',
+          unit:'g',
+          remark:'备注',
           value:'L1-2',
           children:[
             {
               label:'兴癸安溪铁观音',
+              unit:'罐',
+              remark:'备注',
               value:'L1-2-1'
             },
             {
               label:'兰花香安溪特级铁观音',
+              unit:'瓶',
+              remark:'备注',
               value:'L1-2-2'
             },
             {
               label:'惠聚春秋安溪铁观音',
+              unit:'罐',
+              remark:'备注',
               value:'L1-2-3'
             },
             {
               label:'中闽峰州安溪铁观音特级浓香型',
+              unit:'g',
+              remark:'备注',
               value:'L1-2-4'
             },
             {
               label:'正山王特级浓香型铁观音',
+              unit:'瓶',
+              remark:'备注',
               value:'L1-2-5'
             },
           ]
         },
         {
           label:'洞庭碧螺春',
+          unit:'g',
+          remark:'备注',
           value:'L1-3',
           children:[
             {
               label:'云南碧螺春绿茶',
+              unit:'瓶',
+              remark:'备注',
               value:'L1-3-1'
             },
             {
               label:'正山王碧螺春绿茶浓香特级',
+              unit:'箱',
+              remark:'备注',
               value:'L1-3-2'
             },
             {
               label:'庆芸茶业洞庭碧螺春',
+              unit:'瓶',
+              remark:'备注',
               value:'L1-3-3'
             },
             {
               label:'王氏雄风正宗碧螺春',
+              unit:'g',
+              remark:'备注',
               value:'L1-3-4'
             },
             {
               label:'乐品乐茶碧螺春',
+              unit:'箱',
+              remark:'备注',
               value:'L1-3-5'
             },
           ]
         },
         {
           label:'信阳毛尖',
+          unit:'g',
+          remark:'备注',
           value:'L1-4',
           children:[
             {
               label:'味一堂信阳原产明前特级嫩芽浓香型',
+              unit:'g',
+              remark:'备注',
               value:'L1-4-1'
             },
             {
               label:'赛八仙原产明前特级嫩芽浓香型',
+              unit:'箱',
+              remark:'备注',
               value:'L1-4-2'
             },
             {
               label:'静香毛尖绿茶信阳毛尖',
+              unit:'盒',
+              remark:'备注',
               value:'L1-4-3'
             },
             {
               label:'世明信阳毛尖明前特级嫩芽毛尖绿茶浓香型',
+              unit:'箱',
+              remark:'备注',
               value:'L1-4-4'
             },
             {
               label:'王氏雄风毛尖绿茶新茶特级嫩芽',
+              unit:'g',
+              remark:'备注',
               value:'L1-4-5'
             },
           ]
         },
         {
           label:'峨眉竹叶青',
+          unit:'g',
+          remark:'备注',
           value:'L1-5',
           children:[
             {
               label:'云南双柏白竹山一级新茶',
+              unit:'盒',
+              remark:'备注',
               value:'L1-5-1'
             },
             {
               label:'峨眉高山绿茶高端礼盒特级',
+              unit:'g',
+              remark:'备注',
               value:'L1-5-2'
             },
             {
               label:'西蜀茶业峨眉竹叶青',
+              unit:'盒',
+              remark:'备注',
               value:'L1-5-3'
             },
             {
               label:'特级毛峰高山四川峨眉山雀舌嫩芽',
+              unit:'g',
+              remark:'备注',
               value:'L1-5-4'
             },
             {
               label:'静心竹叶青峨眉高山绿茶特级经典礼盒',
+              unit:'盒',
+              remark:'备注',
               value:'L1-5-5'
             },
           ]
         },
         {
           label:'开化龙顶',
+          unit:'g',
+          remark:'备注',
           value:'L1-6',
           children:[
             {
               label:'五叶七叶绞股蓝三龙须茶高非九叶茶',
+              unit:'g',
+              remark:'备注',
               value:'L1-6-1'
             },
             {
               label:'以美养生茶养生茶七叶绞股蓝龙须茶',
+              unit:'盒',
+              remark:'备注',
               value:'L1-6-2'
             },
             {
               label:'平利绞股蓝茶五叶甘味特级龙须茶',
+              unit:'罐',
+              remark:'备注',
               value:'L1-6-3'
             },
             {
               label:'张家界野生嫩芽龙须茶芽尖',
+              unit:'g',
+              remark:'备注',
               value:'L1-6-4'
             },
             {
               label:'福星草平利绞股蓝龙须茶正品野生特级',
+              unit:'罐',
+              remark:'备注',
               value:'L1-6-5'
             },
           ]
@@ -186,130 +260,188 @@ export default {
     },
     {
       label:'红茶',
+      unit:'g',
+      remark:'备注',
       value:'H1',
       children:[
         {
           label:'普洱',
+          unit:'g',
+          remark:'备注',
           value:'H1-1',
           children:[
             {
               label:'五叶七叶绞股蓝三龙须茶高非九叶茶',
+              unit:'g',
+              remark:'备注',
               value:'H1-1-1'
             },
             {
               label:'以美养生茶养生茶七叶绞股蓝龙须茶',
+              unit:'罐',
+              remark:'备注',
               value:'H1-1-2'
             },
             {
               label:'平利绞股蓝茶五叶甘味特级龙须茶',
+              unit:'g',
+              remark:'备注',
               value:'H1-1-3'
             },
             {
               label:'张家界野生嫩芽龙须茶芽尖',
+              unit:'罐',
+              remark:'备注',
               value:'H1-1-4'
             },
           ]
         },
         {
           label:'金骏眉',
+          unit:'g',
+          remark:'备注',
           value:'H1-2',
           children:[
             {
               label:'正山王小青柑橘普柑橘',
+              unit:'罐',
+              remark:'备注',
               value:'H1-2-1'
             },
             {
               label:'味一堂新会小青柑橘普柑橘宫廷普洱茶',
+              unit:'箱',
+              remark:'备注',
               value:'H1-2-2'
             },
             {
               label:'大益普洱茶熟茶',
+              unit:'g',
+              remark:'备注',
               value:'H1-2-3'
             },
           ]
         },
         {
           label:'日照红茶',
+          unit:'g',
+          remark:'备注',
           value:'H1-3',
           children:[
             {
               label:'日照红茶新茶叶一级正山小种',
+              unit:'箱',
+              remark:'备注',
               value:'H1-3-1'
             },
           ]
         },
         {
           label:'祁红',
+          unit:'g',
+          remark:'备注',
           value:'H1-4',
           children:[
             {
               label:'德懋堂桂花祁红',
+              unit:'g',
+              remark:'备注',
               value:'H1-4-1'
             },
             {
               label:'历祖桂花祁门红茶',
+              unit:'箱',
+              remark:'备注',
               value:'H1-4-2'
             },
             {
               label:'正山王安徽祁门红茶',
+              unit:'g',
+              remark:'备注',
               value:'H1-4-3'
             },
             {
               label:'天之红祁门红茶特级',
+              unit:'箱',
+              remark:'备注',
               value:'H1-4-4'
             },
             {
               label:'乐品乐茶祁门红茶特级浓香型',
+              unit:'g',
+              remark:'备注',
               value:'H1-4-5'
             },
           ]
         },
         {
           label:'昭平红',
+          unit:'g',
+          remark:'备注',
           value:'H1-5',
           children:[
             {
               label:'象棋山有机昭平红',
+              unit:'g',
+              remark:'备注',
               value:'H1-5-1'
             },
             {
               label:'亿健特级有机红茶广西昭平将军峰工夫茶',
+              unit:'g',
+              remark:'备注',
               value:'H1-5-2'
             },
           ]
         },
         {
           label:'滇红',
+          unit:'g',
+          remark:'备注',
           value:'H1-6',
           children:[
             {
               label:'云南滇红茶凤庆滇红',
+              unit:'g',
+              remark:'备注',
               value:'H1-6-1'
             },
             {
               label:'古荣号滇红红茶特级',
+              unit:'盒',
+              remark:'备注',
               value:'H1-6-2'
             },
             {
               label:'味一堂凤庆古树滇红茶特级',
+              unit:'g',
+              remark:'备注',
               value:'H1-6-3'
             },
             {
               label:'王大榜特级滇红大金针',
+              unit:'g',
+              remark:'备注',
               value:'H1-6-4'
             },
             {
               label:'芯轩云南凤庆滇红茶',
+              unit:'盒',
+              remark:'备注',
               value:'H1-6-5'
             },
           ]
         },
         {
           label:'越红',
+          unit:'g',
+          remark:'备注',
           value:'H1-7',
           children:[
             {
               label:'越红工夫会稽山高山新茶',
+              unit:'盒',
+              remark:'备注',
               value:'H1-7-1'
             },
           ]
