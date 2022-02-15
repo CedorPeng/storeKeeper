@@ -13,7 +13,7 @@
               </el-radio-group>
             </div>
             <div class="fr screenIcon">
-              <i class="iconfont icon-fullscreen-expand" @click="fullScreen('channel')"></i>
+              <i class="iconfont icon-fullscreen-expand" @click="screenCharts('channel')"></i>
             </div>
           </div>
           <div class="chartMain">
@@ -36,7 +36,7 @@
               </el-radio-group>
             </div>
             <div class="fr screenIcon">
-              <i class="iconfont icon-fullscreen-expand" @click="fullScreen('time')"></i>
+              <i class="iconfont icon-fullscreen-expand" @click="screenCharts('time')"></i>
             </div>
           </div>
           <div class="chartMain">
@@ -62,7 +62,7 @@
               </el-radio-group>
             </div>
             <div class="fr screenIcon">
-              <i class="iconfont icon-fullscreen-expand" @click="fullScreen('product')"></i>
+              <i class="iconfont icon-fullscreen-expand" @click="screenCharts('product')"></i>
             </div>
           </div>
           <div class="chartMain">
@@ -82,7 +82,8 @@
         </div>
       </el-col>
     </el-row>
-    <chartsDetails v-if="showCharts" :type="screenType" @close="shrinkCharts" @transferParams="getTableDetails"></chartsDetails>
+    <chartsDetails v-if="showCharts" :type="screenType" @close="shrinkCharts" @transferParams="screenTable"></chartsDetails>
+    <tableDetails v-if="showTable" :type="screenType" :params="getTableParams" @close="shrinkTable"></tableDetails>
   </div>
 </template>
 
@@ -148,6 +149,7 @@ export default {
       showCharts:false,
       showTable:false,
       screenType:'',
+      getTableParams:{}
     }
   },
   watch:{
@@ -165,10 +167,9 @@ export default {
     // this.getRequest()
   },
   methods:{
-    fullScreen(type){
+    screenCharts(type){
       this.screenType = type
       this.showCharts = true
-
     },
     shrinkCharts(){
       this.showCharts = false
@@ -215,8 +216,9 @@ export default {
         this.$refs.timeChart.echarts.resize()
       })
     },
-    getTableDetails(params){
-      console.log(params,'homePage getTableDetails');
+    screenTable(params){
+      this.getTableParams = params
+      console.log(this.getTableParams,'homePage screenTable');
     }
   }
 }

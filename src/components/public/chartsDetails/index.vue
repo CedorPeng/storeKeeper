@@ -113,6 +113,7 @@
     data(){
       this.chartClick = {
         click:e =>{
+          console.log(e);
           let params = {
             time:e.name,
             timeType:this.timeType

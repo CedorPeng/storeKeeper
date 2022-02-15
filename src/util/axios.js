@@ -10,7 +10,7 @@ const service = axios.create({
   timeout: 1000 * 60 * 5,
   headers: {
     common: {
-      'X-Request-With': 'XMLHttpRequest',
+      'X-Requested-With': 'XMLHttpRequest',
     },
     post: {
       'Content-Type': 'application/x-www-form-urlencoded'
