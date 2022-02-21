@@ -1,53 +1,60 @@
 <template>
   <div id="app">
-    <Header></Header>
-    <div class="main">
-      <div class="menu" :style="{width : toggleTrue ? '266px' : '60px'}">
-<!--        <p>-->
-<!--          <i :class="toggleTrue ? 'el-icon-s-unfold' : 'el-icon-s-fold'" @click="toggleTrue = !toggleTrue"></i>-->
-<!--        </p>-->
-        <div :class="menuActive === 'homePage' ? 'active' : ''" @click="changeMenu('homePage')">
-          <i class="iconfont icon-home"></i>
-          <span v-show="toggleTrue">首页</span>
+    <login v-if="!isLogin"></login>
+    <div v-else>
+      <Header></Header>
+      <div class="main">
+        <div class="menu" :style="{width : toggleTrue ? '266px' : '60px'}">
+          <!--        <p>-->
+          <!--          <i :class="toggleTrue ? 'el-icon-s-unfold' : 'el-icon-s-fold'" @click="toggleTrue = !toggleTrue"></i>-->
+          <!--        </p>-->
+          <div :class="menuActive === 'homePage' ? 'active' : ''" @click="changeMenu('homePage')">
+            <i class="iconfont icon-home"></i>
+            <span v-show="toggleTrue">首页</span>
+          </div>
+          <div :class="menuActive === 'sale' ? 'active' : ''" @click="changeMenu('sale')">
+            <i class="iconfont icon-salecanter"></i>
+            <span v-show="toggleTrue">销售管理</span>
+          </div>
+          <div :class="menuActive === 'stock' ? 'active' : ''" @click="changeMenu('stock')">
+            <i class="iconfont icon-cangkukucun"></i>
+            <span v-show="toggleTrue">库存</span>
+          </div>
+          <div :class="menuActive === 'purchase' ? 'active' : ''" @click="changeMenu('purchase')">
+            <i class="iconfont icon-rukudan"></i>
+            <span v-show="toggleTrue">采购管理</span>
+          </div>
+          <div :class="menuActive === 'storeManage' ? 'active' : ''" @click="changeMenu('storeManage')">
+            <i class="iconfont icon-setting"></i>
+            <span v-show="toggleTrue">店铺设置</span>
+          </div>
         </div>
-        <div :class="menuActive === 'sale' ? 'active' : ''" @click="changeMenu('sale')">
-          <i class="iconfont icon-salecanter"></i>
-          <span v-show="toggleTrue">销售管理</span>
-        </div>
-        <div :class="menuActive === 'stock' ? 'active' : ''" @click="changeMenu('stock')">
-          <i class="iconfont icon-cangkukucun"></i>
-          <span v-show="toggleTrue">库存</span>
-        </div>
-        <div :class="menuActive === 'purchase' ? 'active' : ''" @click="changeMenu('purchase')">
-          <i class="iconfont icon-rukudan"></i>
-          <span v-show="toggleTrue">采购管理</span>
-        </div>
-        <div :class="menuActive === 'storeManage' ? 'active' : ''" @click="changeMenu('storeManage')">
-          <i class="iconfont icon-setting"></i>
-          <span v-show="toggleTrue">店铺设置</span>
+        <div class="content">
+          <router-view/>
         </div>
       </div>
-      <div class="content">
-        <router-view/>
-      </div>
+      <Footer></Footer>
     </div>
-    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Header from './components/homePage/header/index'
 import Footer from './components/homePage/Footer/index'
+import login from './components/login/index'
 export default {
   name: 'App',
   components:{
     Header,
     Footer,
+    login
   },
   data(){
     return {
       menuActive:'',
       toggleTrue:true,
+      token:'',
+      isLogin:false,
     }
   },
   watch:{
@@ -64,10 +71,14 @@ export default {
       if(this.menuActive === type) return
       this.menuActive = type
       this.$router.push({name:type})
-    }
+    },
+    validateLogin(){
+      this.isLogin = this.utils.getCookie('token') !== ''
+    },
   },
   mounted() {
     this.menuActive = this.$route.name
+    this.validateLogin()
   }
 }
 </script>

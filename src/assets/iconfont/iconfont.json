@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1168074",
+      "name": "微信登录",
+      "font_class": "weixindenglu",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "1168080",
+      "name": "QQ登录",
+      "font_class": "qqdenglu",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "11741026",
+      "name": "phone",
+      "font_class": "phone1",
+      "unicode": "e686",
+      "unicode_decimal": 59014
+    },
+    {
+      "icon_id": "321992",
+      "name": "personal-center",
+      "font_class": "gerenzhongxin1",
+      "unicode": "e70b",
+      "unicode_decimal": 59147
+    },
+    {
+      "icon_id": "4954912",
+      "name": "锁定",
+      "font_class": "suoding",
+      "unicode": "e650",
+      "unicode_decimal": 58960
+    },
+    {
       "icon_id": "22621145",
       "name": "消息、信息、铃铛",
       "font_class": "xiaoxi",

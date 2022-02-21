@@ -308,6 +308,66 @@ CedorUtils.prototype = {
     //   .join('')
     //   .replace(/零+/g,'零')
     //   .replace(/^零+|零+$/g,'')
+  },
+  /**
+   * 设置Cookie
+   * */
+  addCookie: function (name, value, time) {
+    var strSec = this.getSec(time);
+    var exp = new Date();
+    exp.setTime(exp.getTime() + strSec * 1);
+    //设置cookie的名称、值、失效时间
+    document.cookie = name + "=" + value + ";expires="+ exp.toGMTString();
+  },
+  /**
+   * 获取cookie
+   */
+  delCookie: function (name) {
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    //获取cookie是否存在
+    var value = this.getCookie(name);
+    if (value != null) {
+      document.cookie = name + "=" + value + ";expires="+ exp.toUTCString();
+    }
+  },
+  /**
+   * 获取cookie
+   */
+  getCookie: function (name) {
+    //获取当前所有cookie
+    var strCookies = document.cookie;
+    //截取变成cookie数组
+    var array = strCookies.split(';');
+    //循环每个cookie
+    for (var i = 0; i < array.length; i++) {
+      //将cookie截取成两部分
+      var item = array[i].split("=");
+      //判断cookie的name 是否相等
+      if (item[0] == name) {
+        return item[1];
+      }
+    }
+    return '';
+  },
+  /**
+   * 计算cookie毫秒
+   * */
+  getSec: function(str){
+    var str1 = str.substr(0, str.length - 1);  //时间数值
+    var str2 = str.substr(str.length-1, 1);    //时间单位
+    if (str2 == "s") {
+      return str1 * 1000;
+    }
+    else if (str2 == "m") {
+      return str1 * 60 * 1000;
+    }
+    else if (str2 == "h") {
+      return str1 * 60 * 60 * 1000;
+    }
+    else if (str2 == "d") {
+      return str1 * 24 * 60 * 60 * 1000;
+    }
   }
 
 
