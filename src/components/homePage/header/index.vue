@@ -68,6 +68,9 @@ export default {
       font-size: 26px;
       margin-right: 10px;
       cursor: pointer;
+      &.icon-xiaoxi{
+        font-size: 24px;
+      }
     }
   }
 }

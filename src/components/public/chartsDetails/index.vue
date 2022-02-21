@@ -116,7 +116,8 @@
           console.log(e);
           let params = {
             time:e.name,
-            timeType:this.timeType
+            timeType:this.timeType,
+            saleCount:e.value[1]
           }
           if(this.type === 'product') params.product = e.seriesName
           if(this.type === 'channel') params.channel = e.seriesName
@@ -196,7 +197,6 @@
         this.$emit('close')
       },
       timeTypeChange(){
-        console.log(this.timeType);
         this.searchYear = []
         this.searchTime = []
         this.getChartsData()
@@ -229,10 +229,15 @@
         if(this.type === 'product') params.product = this.searchProduct
         if(this.type === 'channel') params.channel = this.searchChannel
         console.log(params,`get${this.type}`);
+        let timeText = {
+          days:'Days',
+          month:'Month',
+          year:'Year',
+        }
         let dataObject = {
-          channel:require('../../../util/baseData').default.channelDays.slice(-200),
-          product:require('../../../util/baseData').default.teaDays.slice(-100),
-          time:require('../../../util/baseData').default.numberDays.slice(-300),
+          channel:require('../../../util/baseData').default[`channel${timeText[this.timeType]}`].slice(-200),
+          product:require('../../../util/baseData').default[`tea${timeText[this.timeType]}`].slice(-100),
+          time:require('../../../util/baseData').default[`number${timeText[this.timeType]}`].slice(-300),
         }
         this.chartsData.data = {
           columns:this.chartsData[this.type],

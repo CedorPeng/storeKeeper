@@ -164,7 +164,7 @@ export default {
     this.channelChange()
     this.teaTypeChange()
     this.timeChange()
-    // this.getRequest()
+    this.getRequest()
   },
   methods:{
     screenCharts(type){
@@ -219,6 +219,7 @@ export default {
     screenTable(params){
       this.getTableParams = params
       console.log(this.getTableParams,'homePage screenTable');
+      this.showTable = true
     }
   }
 }
