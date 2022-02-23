@@ -2,8 +2,8 @@
   <div class="login">
     <div class="loginBox">
       <div class="currentTab">
-        <div class="active">登 陆</div>
-        <div>注 册</div>
+        <div :class="loginType === 'login' ? 'active' : ''" @click="changeActive('login')">登 陆</div>
+        <div :class="loginType === 'sign' ? 'active' : ''" @click="changeActive('sign')">注 册</div>
       </div>
       <div class="inputBox">
         <div>
@@ -13,6 +13,10 @@
         <div>
           <i class="iconfont icon-suoding"></i>
           <el-input placeholder="密码" show-password v-model="password"></el-input>
+        </div>
+        <div v-if="loginType === 'sign'">
+          <i class="iconfont icon-suoding"></i>
+          <el-input placeholder="密码" show-password v-model="passwordAgain"></el-input>
         </div>
       </div>
       <div class="forgetPassword">忘记密码？</div>
@@ -40,10 +44,16 @@
       return {
         username:'',
         password:'',
+        passwordAgain:'',
+        loginType:'login',
 
       }
     },
     methods:{
+      changeActive(type){
+        if(this.loginType === type) return
+        this.loginType = type
+      },
       login(){
         if(this.username === ''){
           this.$message.warning('请输入用户名/手机号')
@@ -126,7 +136,7 @@
       text-align: right;
       color: #409eff;
       font-size: 14px;
-      /*text-decoration:;*/
+      cursor: pointer;
     }
     .loginBtn{
       width: 80%;
