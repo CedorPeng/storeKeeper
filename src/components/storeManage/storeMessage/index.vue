@@ -50,7 +50,7 @@
             <span class="typeItem" v-for="(item,index) in editSaleType" :key="index">{{item}} <i @click="removeType(index)" class="el-icon-remove"></i></span>
             <i @click="clickAddType" v-show="!isAddType" class="el-icon-circle-plus-outline"></i>
             <div v-show="isAddType">
-              <el-input clearable v-model="addValue" placeholder="请输入销售途径" class="input-with-select" @keyup.native="searchValueDown">
+              <el-input clearable v-model="addValue" placeholder="请输入销售途径" class="input-with-select" @keyup.native="editChannelEnter">
                 <el-button slot="append" icon="el-icon-edit" @click="addType"></el-button>
               </el-input>
             </div>
@@ -128,10 +128,12 @@ export default {
       this.editSaleType.splice(index, 1);
     },
     addType(){
-      this.editSaleType.push(this.addValue)
+      if( this.utils.removeBothSides(this.addValue) !== ''){
+        this.editSaleType.push(this.addValue)
+      }
       this.isAddType = false
     },
-    searchValueDown(event){
+    editChannelEnter(event){
       let e = event || window.event
       if (e.keyCode === 13) {
         this.addType()
