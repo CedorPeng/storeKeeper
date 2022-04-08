@@ -1,114 +1,116 @@
 <template>
   <div class="chartsDetails">
+    <TypeSelectors></TypeSelectors>
     <i class="iconfont icon-fullscreen-shrink" @click="hideCharts('channel')"></i>
-    <div class="timeRadio">
-      <el-radio-group v-model="timeType" @change="timeTypeChange" size="small">
-        <el-radio-button label="days">日</el-radio-button>
-        <el-radio-button label="month">月</el-radio-button>
-        <el-radio-button label="year">年</el-radio-button>
-      </el-radio-group>
-    </div>
-    <h2>销售额-{{typeObject[type]}}</h2>
-    <div class="clearfix">
-      <div class="selectItem" v-if="type === 'channel'">
-        <div class="itemLabel">销售途径</div>
-        <div class="itemSelect">
-          <dropTree
-            placeholder="请选择销售途径"
-            multiple
-            clearable
-            :options="channelOptions"
-            v-model="searchChannel"
-            @selectDone="getChartsData"
-          ></dropTree>
-        </div>
-      </div>
-      <div class="selectItem" v-if="type === 'product'">
-        <div class="itemLabel">产品名称</div>
-        <div class="itemSelect">
-          <dropTree
-            placeholder="请选择产品名称"
-            multiple
-            clearable
-            :options="productOptions"
-            v-model="searchProduct"
-            @selectDone="getChartsData"
-          ></dropTree>
-        </div>
-      </div>
-      <div class="selectItem" v-if="timeType === 'days'">
-        <div class="itemLabel">时间</div>
-        <div class="itemSelect">
-          <el-date-picker
-            size="mini"
-            v-model="searchTime"
-            type="daterange"
-            align="right"
-            unlink-panels
-            value-format="yyyy-MM-dd"
-            range-separator="-"
-            :picker-options="pickerOptions"
-            @change="getChartsData"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
-          </el-date-picker>
-        </div>
-      </div>
-      <div class="selectItem" v-if="timeType === 'month'">
-        <div class="itemLabel">时间</div>
-        <div class="itemSelect">
-          <el-date-picker
-            size="mini"
-            v-model="searchTime"
-            type="monthrange"
-            align="right"
-            unlink-panels
-            value-format="yyyy-MM"
-            range-separator="-"
-            :picker-options="pickerOptions"
-            @change="getChartsData"
-            start-placeholder="开始月份"
-            end-placeholder="结束月份">
-          </el-date-picker>
-        </div>
-      </div>
-      <div class="selectItem" v-if="timeType === 'year'">
-        <div class="itemLabel">时间</div>
-        <div class="itemSelect">
-          <dropTree
-            placeholder="请选择年份"
-            multiple
-            clearable
-            :options="yearList"
-            v-model="searchYear"
-            @selectDone="getChartsData"
-          ></dropTree>
-        </div>
-      </div>
-    </div>
-    <div class="chartsMain">
-      <ve-line
-        ref="channelChart"
-        :data="chartsData.data"
-        :extend="chartsData.extend"
-        height="calc(100vh - 200px)"
-        :events="chartClick"
-        :settings="chartsData.settings"
-      ></ve-line>
-    </div>
+<!--    <div class="timeRadio">-->
+<!--      <el-radio-group v-model="timeType" @change="timeTypeChange" size="small">-->
+<!--        <el-radio-button label="days">日</el-radio-button>-->
+<!--        <el-radio-button label="month">月</el-radio-button>-->
+<!--        <el-radio-button label="year">年</el-radio-button>-->
+<!--      </el-radio-group>-->
+<!--    </div>-->
+<!--    <h2>销售额-{{typeObject[type]}}</h2>-->
+<!--    <div class="clearfix">-->
+<!--      <div class="selectItem" v-if="type === 'channel'">-->
+<!--        <div class="itemLabel">销售途径</div>-->
+<!--        <div class="itemSelect">-->
+<!--          <dropTree-->
+<!--            placeholder="请选择销售途径"-->
+<!--            multiple-->
+<!--            clearable-->
+<!--            :options="channelOptions"-->
+<!--            v-model="searchChannel"-->
+<!--            @selectDone="getChartsData"-->
+<!--          ></dropTree>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="selectItem" v-if="type === 'product'">-->
+<!--        <div class="itemLabel">产品名称</div>-->
+<!--        <div class="itemSelect">-->
+<!--          <dropTree-->
+<!--            placeholder="请选择产品名称"-->
+<!--            multiple-->
+<!--            clearable-->
+<!--            :options="productOptions"-->
+<!--            v-model="searchProduct"-->
+<!--            @selectDone="getChartsData"-->
+<!--          ></dropTree>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="selectItem" v-if="timeType === 'days'">-->
+<!--        <div class="itemLabel">时间</div>-->
+<!--        <div class="itemSelect">-->
+<!--          <el-date-picker-->
+<!--            size="mini"-->
+<!--            v-model="searchTime"-->
+<!--            type="daterange"-->
+<!--            align="right"-->
+<!--            unlink-panels-->
+<!--            value-format="yyyy-MM-dd"-->
+<!--            range-separator="-"-->
+<!--            :picker-options="pickerOptions"-->
+<!--            @change="getChartsData"-->
+<!--            start-placeholder="开始日期"-->
+<!--            end-placeholder="结束日期">-->
+<!--          </el-date-picker>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="selectItem" v-if="timeType === 'month'">-->
+<!--        <div class="itemLabel">时间</div>-->
+<!--        <div class="itemSelect">-->
+<!--          <el-date-picker-->
+<!--            size="mini"-->
+<!--            v-model="searchTime"-->
+<!--            type="monthrange"-->
+<!--            align="right"-->
+<!--            unlink-panels-->
+<!--            value-format="yyyy-MM"-->
+<!--            range-separator="-"-->
+<!--            :picker-options="pickerOptions"-->
+<!--            @change="getChartsData"-->
+<!--            start-placeholder="开始月份"-->
+<!--            end-placeholder="结束月份">-->
+<!--          </el-date-picker>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="selectItem" v-if="timeType === 'year'">-->
+<!--        <div class="itemLabel">时间</div>-->
+<!--        <div class="itemSelect">-->
+<!--          <dropTree-->
+<!--            placeholder="请选择年份"-->
+<!--            multiple-->
+<!--            clearable-->
+<!--            :options="yearList"-->
+<!--            v-model="searchYear"-->
+<!--            @selectDone="getChartsData"-->
+<!--          ></dropTree>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="chartsMain">-->
+<!--      <ve-line-->
+<!--        ref="channelChart"-->
+<!--        :data="chartsData.data"-->
+<!--        :extend="chartsData.extend"-->
+<!--        height="calc(100vh - 200px)"-->
+<!--        :events="chartClick"-->
+<!--        :settings="chartsData.settings"-->
+<!--      ></ve-line>-->
+<!--    </div>-->
 
   </div>
 </template>
 
 <script>
   import dropTree from '../dropTree/index'
+  import TypeSelectors from '../TypeSelectors/index'
   export default {
     name: "index",
     props:{
       type:[String],
     },
     components:{
-      dropTree
+      dropTree,TypeSelectors
     },
     data(){
       this.chartClick = {
